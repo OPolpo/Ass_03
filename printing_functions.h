@@ -8,6 +8,8 @@
 	#else
 	#include <GL/glut.h>
 	#endif
+	#include <math.h>
+	
 	
 	void drawSun(double angle);
 	void drawEarth(double angle);

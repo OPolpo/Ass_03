@@ -1,5 +1,7 @@
 #include "input.h"
-#include "planets.h"
+#include "printing_functions.h"
+
+
 
 void myKeyboardFunc(unsigned char key, int x, int y){
 	switch ( key ) {
@@ -15,19 +17,11 @@ void myKeyboardFunc(unsigned char key, int x, int y){
 		RunMode = 0;
 		break;
 	case '1':
-		if(enableAxis()==0)
-			disableAxis();
-		glutPostRedisplay();
 		break;
 	case '2':
-		if(enableOrbit()==0)
-			disableOrbit();
-		glutPostRedisplay();
 		break;
 	case '3':
-		if(enableTardis()==0)
-			disableTardis();
-		glutPostRedisplay();
+
 		break;
 	case 'w':
 		eye_distance-=MOVEMENT_COEFFICIENT*5;
@@ -82,4 +76,20 @@ void mySpecialKeyFunc( int key, int x, int y ){
 		break;
 	}
 }
+
+
+// void mouseMovement(int _x, int _y) {
+// 	viewAngle_horizontal+=(_x-window_h/2)*0.0003;
+// 	viewAngle_vertical+=(_y-window_h/2)*0.0003;
+
+// 	CGSetLocalEventsSuppressionInterval(0.0);
+// 	glutWarpPointer(window_h/2,window_w/2);
+// 	eye_ed[0]=sin(viewAngle_horizontal)*40;
+// 	eye_ed[1]=cos(viewAngle_horizontal)*40;
+
+// 	eye_ed[1]+=(1-cos(viewAngle_vertical))*40;
+// 	eye_ed[2]=-sin(viewAngle_vertical)*40;
+// 	printf("vert: %f hor: %f\n",viewAngle_vertical,viewAngle_horizontal);
+// 	printf("vert: %d hor: %d\n",_x,_y);
+// }
 

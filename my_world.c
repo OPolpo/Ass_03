@@ -10,7 +10,7 @@
 #else
 #include <GL/glut.h>
 #endif
-#include "planets.h"
+#include "printing_functions.h"
 #include "input.h"
 
 #define SDL_main main //poi qualcuno me la dovrà spiegare sta cosa...
@@ -57,17 +57,13 @@ void drawScene(void){
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
+	
+
 	menu();// print the on screen menu
 
 	gluLookAt (eye[0], eye[1], eye[2], 0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
 
-	drawSun(AnimationAngle);
-	drawEarth(AnimationAngle);
-	drawMars(AnimationAngle);
-	drawStars(AnimationAngle);
-	
-	
-	WHO(100*AnimationAngle);// glEnable(GL_FUNNY_MODE)
+	printGrass();
 
     glFlush();
     glutSwapBuffers();
@@ -79,8 +75,7 @@ void drawScene(void){
 
 
 void initRendering(){
-	enableOrbit();
-	enableAxis();
+	glutSetCursor(GLUT_CURSOR_NONE); // to pin the mouse at the center of the screen
 
     glShadeModel(GL_FLAT);
     glEnable(GL_DEPTH_TEST);
@@ -88,7 +83,6 @@ void initRendering(){
 	glEnable(GL_LIGHT0);
 	glEnable(GL_TEXTURE_2D);
 
-	//For Alpha Channel - Needed by Tardis
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
@@ -102,7 +96,6 @@ void initRendering(){
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, light_ambient);
 	
 	locateCamera();
-
 	loadTexture();
 
 }

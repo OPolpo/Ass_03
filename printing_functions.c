@@ -7,7 +7,7 @@
  * In this file there are the function the print planet orbit and axis and the menu
  */
 
-#include "planets.h"
+#include "printing_functions.h"
 #include <SDL.h>
 #include <SDL_image.h>
 
@@ -25,103 +25,38 @@ static GLuint texName4;
 static GLuint texName5;
 
 
-/**
- * @brief Print Generic Planet.
- * This function print a generic planet.
- * @param main_animation_angle this angle is used to animate the planet.
- * @param radius the radisu of the sphere that represent the planet.
- * @param po_x x position of the planet.
- * @param po_y y position of the planet.
- * @param po_z z position of the planet.
- * @param year_length the lenght of the year expressed in earth day.
- * @param day_length the lenght of the day expressed in earth hours.
- * @param orbital_angle inclination of the orbit.
- * @param orb_x direction of orbital inclination.
- * @param orb_y direction of orbital inclination.
- * @param orb_z direction of orbital inclination.
- * @param axis_angle inclination of the axis of the planet.
- * @param axis_x direction of axis inclination.
- * @param axis_y direction of axis inclination.
- * @param axis_z direction of axis inclination.
- * @param text_name texture indices.
- */
-void drawPlanet(double main_animation_angle, double radius, double pos_x, double pos_y, double pos_z,
-				double year_legth, double day_length, 
-				double orbital_angle, double orb_x, double orb_y, double orb_z,
-				double axis_angle, double axis_x, double axis_y, double axis_z,
-				GLuint text_name){
 
-	glPushMatrix();
-		GLfloat col[] = {0.5, 0.5, 0.5};
-		glRotatef(orbital_angle, orb_x, orb_y, orb_z);//ORBITAL ORIENTATION
-		if(ORBIT){
-			drawOrbit(sqrt(pos_x*pos_x+pos_y*pos_y+pos_z*pos_z),col);
-		}
-		if(year_legth)//to prevent division by zero
-			glRotatef(main_animation_angle*(365./year_legth), 0, 0, 1);//REVOLUTION
-		glPushMatrix();
-			glTranslatef(pos_x,pos_y,pos_z);
-			glRotatef(axis_angle, axis_x, axis_y, axis_z);//AXIS ORIENTATION
-			glRotatef(main_animation_angle*365*(24./day_length), 0, 0, 1);//ROTATION
-			GLUquadric *qobj = gluNewQuadric();
-			gluQuadricTexture(qobj,GL_TRUE); 
-			
-			glEnable(GL_TEXTURE_2D);
-				glBindTexture(GL_TEXTURE_2D,text_name);
-				gluSphere(qobj,radius,50,50); 
-				gluDeleteQuadric(qobj); 
-			glDisable(GL_TEXTURE_2D);
-			
-			if(AXIS){
-				drawAxis(radius,col);
-			}
-
-		glPopMatrix();
-	glPopMatrix();
-}
 
 /**
- * @brief Print Sun.
- * This function print Sun.
- * @param angle change this value to move the sun in the next position.
+ * @brief Print Grass.
+ * This function print Grass.
  */
-void drawSun(double angle){
+void printGrass(){
 	glPushAttrib(GL_LIGHTING_BIT);
 		GLfloat material_col[] = {1.0, 1.0, 1.0};
 		glMaterialfv(GL_FRONT, GL_EMISSION, material_col);
-		drawPlanet(1000*angle, 2.0, 0.0, 0.0, 0.0,
-					0.0, 25*24,
-					0.0, 0.0, 0.0, 0.0,
-					0.0, 0.0, 0.0, 0.0,
-					texName1);
+
+
+
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texName1);
+	glPushMatrix();
+		glBegin(GL_QUADS);
+			glTexCoord2f(0.0, 0.0); 
+			glVertex3f(-50.0, -50.0, 0.0);
+			glTexCoord2f(0.0, 10.0); 
+			glVertex3f(-50.0, 50.0, 0.0);
+			glTexCoord2f(10.0, 10.0); 
+			glVertex3f(50.0, 50.0, 0.0);
+			glTexCoord2f(10.0, 0.0); 
+			glVertex3f(50.0, -50.0, 0.0);
+		glEnd();
+	glPopMatrix();
+	glDisable(GL_TEXTURE_2D);
+
 	glPopAttrib();
 }
 
-/**
- * @brief Print Earth.
- * This function print Earth.
- * @param angle change this value to move the Earth in the next position.
- */
-void drawEarth(double angle){
-	drawPlanet(1000*angle, 1.5, 7.0, 0.0, 0.0,
-				365.0, 24.0,
-				10, 1.0, 0.0, 0.0,
-				35.0, 0.0, 1.0, 0.0,
-				texName2);
-}
-
-/**
- * @brief Print Mars.
- * This function print Mars.
- * @param angle change this value to move the Mars in the next position.
- */
-void drawMars(double angle){
-	drawPlanet(1000*angle, 0.9, 14.0, 0.0, 0.0,
-				687, 24.0,
-				6.0, 0.0, 1.0, 1.0,
-				10.0, 0.0, 1.0, 0.0,
-				texName3);
-}
 
 /**
  * @brief Create a texture.
@@ -145,11 +80,11 @@ void createTexture(GLuint* text_name, char* file_path){
  * This function build all the texture.
  */
 void loadTexture(){
-	createTexture(&texName1,"./texture/sun.png");
-	createTexture(&texName2,"./texture/earth.png");
-	createTexture(&texName3,"./texture/mars.jpg");
-	createTexture(&texName4,"./texture/stars.png");
-	createTexture(&texName5,"./texture/Tardis.png");
+	createTexture(&texName1,"./texture/grass.jpg");
+	// createTexture(&texName2,"./texture/earth.png");
+	// createTexture(&texName3,"./texture/mars.jpg");
+	// createTexture(&texName4,"./texture/stars.png");
+	// createTexture(&texName5,"./texture/Tardis.png");
 }
 
 
@@ -184,47 +119,7 @@ int enableOrbit(){
 }
 
 void disableOrbit(){ORBIT=0;};
-int enableAxis(){
-	if(AXIS){
-		AXIS=1;
-		return 0;
-	}
-	AXIS=1;
-	return 1;
-}
-void disableAxis(){AXIS=0;};
 
-void drawCarth();
-int enableTardis(){
-	if(TARDIS){
-		TARDIS=1;
-		return 0;
-	}
-	TARDIS=1;
-	return 1;
-}
-void disableTardis(){TARDIS=0;};
-
-void drawStars(double angle){
-	//sta cosa solo perchè ho voluto fare void disableAxis
-	//per l'orbita non mi faccio problemi in quanto non si vede negli elementi centrati in 0
-	int statoassi=enableAxis();
-	if(statoassi==0)//se erano abilitati
-		disableAxis();//li spengo
-	disableAxis();//se per caso li ho accesi li spegno di nuovo 
-	//disegno
-	glPushAttrib(GL_LIGHTING_BIT);
-		GLfloat material_col[] = {1.0, 1.0, 1.0};
-		glMaterialfv(GL_FRONT, GL_EMISSION, material_col);
-		drawPlanet(1000*angle, 50, 0.0, 0.0, 0.0,
-					0, 1000000.0,
-					0.0, 0.0, 0.0, 0.0,
-					0.0, 0.0, 0.0, 0.0,
-					texName4);
-	glPopAttrib();
-	if(statoassi==0)
-		enableAxis();
-}
 
 void drawOrbit(double radius, GLfloat color[3]){
 	glDisable(GL_LIGHTING);
