@@ -15,7 +15,6 @@
 
 #define SDL_main main //poi qualcuno me la dovrà spiegare sta cosa...
 
-
 // Function prototypes
 void drawScene(void);
 
@@ -25,7 +24,7 @@ int RunMode = 1;		// Used as a boolean (1 or 0) for "on" and "off"
 double viewAngle_horizontal=0.30;//radiant
 double viewAngle_vertical=-0.39;//radiant
 
-double eye[3]={0,0,5};// i suggest to use engle and distance to set pov and not this value
+double eye[3]={0,0,1.2};// i suggest to use engle and distance to set pov and not this value
 double eye_ed[3]={0,30,0};
 
 
@@ -62,6 +61,8 @@ void drawScene(void){
 
 	menu();// print the on screen menu
 
+
+	HalfLifeCrowbar();
 	gluLookAt (eye[0], eye[1], eye[2], eye_ed[0], eye_ed[1], eye_ed[2], 0.0, 0.0, 1.0);
 
 	glPushMatrix();
@@ -84,8 +85,13 @@ void drawScene(void){
 			glVertex3f(1.0, -1.0, 0.0);
 		glEnd();
 	glPopMatrix();
-
 	printGrass();
+	printTree(10,10,7);
+	printTree(-10,15,10);
+	printTree(-20,10,8);
+	printTree(-10,-19,9);
+	
+
 	
 
     glFlush();
@@ -108,6 +114,10 @@ void initRendering(){
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glEnable (GL_ALPHA_TEST) ;
+	glAlphaFunc(GL_GREATER, 0.0f);
+
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
 	glLightfv(GL_LIGHT0, GL_POSITION, light_pos);

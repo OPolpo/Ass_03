@@ -19,8 +19,8 @@ int TARDIS=0;
 SDL_Surface* sdlimage;
 
 static GLuint texName1;
-static GLuint texName2;
-static GLuint texName3;
+static GLuint texTree1;
+static GLuint texCrowBar;
 static GLuint texName4;
 static GLuint texName5;
 
@@ -53,6 +53,77 @@ void printGrass(){
 
 	glPopAttrib();
 }
+/**
+ * @brief Print custom tree.
+ * This function print a tree.
+ */
+void printTree(int x, int y, int h){
+	glPushAttrib(GL_LIGHTING_BIT);
+		GLfloat material_col[] = {1.0, 1.0, 1.0, 0.0};
+		glMaterialfv(GL_FRONT, GL_EMISSION, material_col);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, texTree1);
+		glPushMatrix();
+			glTranslatef(x,y,h);
+			//glRotatef(135, 0, 0, 1);
+			glRotatef(-90, 1, 0, 0);
+			glBegin(GL_QUADS);
+				glTexCoord2f(0.0, 0.0); 
+				glVertex3f(-h*0.6, 0.0, 0.0);
+				glTexCoord2f(0.0, 1.0); 
+				glVertex3f(-h*0.6, h, 0.0);
+				glTexCoord2f(1.0, 1.0); 
+				glVertex3f(h*0.6, h, 0.0);
+				glTexCoord2f(1.0, 0.0); 
+				glVertex3f(h*0.6, 0.0, 0.0);
+			glEnd();
+		glPopMatrix();
+		glPushMatrix();
+			glTranslatef(x,y,h);
+			//glRotatef(135, 0, 0, 1);
+			glRotatef(90, 0, 1, 0);
+			glRotatef(-90, 0, 0, 1);
+			glBegin(GL_QUADS);
+				glTexCoord2f(0.0, 0.0); 
+				glVertex3f(-h*0.6, 0.0, 0.0);
+				glTexCoord2f(0.0, 1.0); 
+				glVertex3f(-h*0.6, h, 0.0);
+				glTexCoord2f(1.0, 1.0); 
+				glVertex3f(h*0.6, h, 0.0);
+				glTexCoord2f(1.0, 0.0); 
+				glVertex3f(h*0.6, 0.0, 0.0);
+			glEnd();
+		glPopMatrix();
+		glDisable(GL_TEXTURE_2D);
+	glPopAttrib();
+}
+
+HalfLifeCrowbar(){
+	glPushAttrib(GL_LIGHTING_BIT);
+		GLfloat material_col[] = {1.0, 1.0, 1.0, 0.0};
+		glMaterialfv(GL_FRONT, GL_EMISSION, material_col);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, texCrowBar);
+		glPushMatrix();
+			glTranslatef(0.4,-0.4,-1.0);
+			//glRotatef(135, 0, 0, 1);
+			//glRotatef(-15, 0, 0, 1);
+			//glRotatef(180, 1, 0, 0);
+			//glRotatef(180, 0, 1, 0);
+			glBegin(GL_QUADS);
+				glTexCoord2f(0.0, 0.0); 
+				glVertex3f(-0.2, -0.2, -0.0);
+				glTexCoord2f(0.0, 1.0); 
+				glVertex3f(-0.2, 0.2, -0.0);
+				glTexCoord2f(1.0, 1.0); 
+				glVertex3f(0.2, 0.2, 0.0);
+				glTexCoord2f(1.0, 0.0); 
+				glVertex3f(0.2, -0.2, 0.0);
+			glEnd();
+		glPopMatrix();
+		glDisable(GL_TEXTURE_2D);
+	glPopAttrib();
+}
 
 
 /**
@@ -78,8 +149,8 @@ void createTexture(GLuint* text_name, char* file_path){
  */
 void loadTexture(){
 	createTexture(&texName1,"./texture/grass.jpg");
-	// createTexture(&texName2,"./texture/earth.png");
-	// createTexture(&texName3,"./texture/mars.jpg");
+	createTexture(&texTree1,"./texture/tree1.png");
+	createTexture(&texCrowBar,"./texture/crowbar2.png");
 	// createTexture(&texName4,"./texture/stars.png");
 	// createTexture(&texName5,"./texture/Tardis.png");
 }
