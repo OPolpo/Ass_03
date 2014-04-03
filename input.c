@@ -1,6 +1,9 @@
 #include "input.h"
 #include "printing_functions.h"
 
+double eye_distance=30;
+double eye_inc=0;
+
 
 
 void myKeyboardFunc(unsigned char key, int x, int y){
@@ -24,43 +27,49 @@ void myKeyboardFunc(unsigned char key, int x, int y){
 
 		break;
 	case 'w':
-		eye_distance-=MOVEMENT_COEFFICIENT*5;
+		eye[0]+=sin(viewAngle_horizontal)*MOVEMENT_COEFFICIENT;
+		eye[1]+=cos(viewAngle_horizontal)*MOVEMENT_COEFFICIENT;
 		glutPostRedisplay();
 		break;
 	case 's':
-		eye_distance+=MOVEMENT_COEFFICIENT*5;
+		eye[0]-=sin(viewAngle_horizontal)*MOVEMENT_COEFFICIENT;
+		eye[1]-=cos(viewAngle_horizontal)*MOVEMENT_COEFFICIENT;
 		glutPostRedisplay();
 		break;
 	case 'a':
-		viewAngle_horizontal+=MOVEMENT_COEFFICIENT;
+		eye[1]-=-sin(viewAngle_horizontal)*MOVEMENT_COEFFICIENT;
+		eye[0]-=cos(viewAngle_horizontal)*MOVEMENT_COEFFICIENT;
 		glutPostRedisplay();
 		break;
 	case 'd':
-		viewAngle_horizontal-=MOVEMENT_COEFFICIENT;
+		eye[1]+=-sin(viewAngle_horizontal)*MOVEMENT_COEFFICIENT;
+		eye[0]+=cos(viewAngle_horizontal)*MOVEMENT_COEFFICIENT;
 		glutPostRedisplay();
 		break;
 	case 'c':
-		viewAngle_vertical-=MOVEMENT_COEFFICIENT;
+		eye[2]-=MOVEMENT_COEFFICIENT;
 		glutPostRedisplay();
 		break;
 	case 'v':
-		viewAngle_vertical+=MOVEMENT_COEFFICIENT;
+		eye[2]+=MOVEMENT_COEFFICIENT;
 		glutPostRedisplay();
 		break;
 	case 27:	// Escape key
 		exit(1);
 	}
-	locateCamera();
+	glutPostRedisplay();
 }
 /**
  * @brief compute the camera position
  * This function set the the eye position (camera) using the angle (horizontal and vertical) and the distance
  */
 void locateCamera(){
-	eye[2]=-sin(viewAngle_vertical)*eye_distance;
-	eye[0]=sin(viewAngle_horizontal)*(eye_distance-(1-cos(viewAngle_vertical))*eye_distance);
-	eye[1]=cos(viewAngle_horizontal)*(eye_distance-(1-cos(viewAngle_vertical))*eye_distance);
+	//printf("%f %f %f\n",eye_ed[0],eye_ed[1],eye_ed[2]);
+	eye_ed[2]=eye[2]-sin(viewAngle_vertical)*eye_distance;
+	eye_ed[0]=eye[0]+sin(viewAngle_horizontal)*(eye_distance-(1-cos(viewAngle_vertical))*eye_distance);
+	eye_ed[1]=eye[1]+cos(viewAngle_horizontal)*(eye_distance-(1-cos(viewAngle_vertical))*eye_distance);
 }
+
 
 void mySpecialKeyFunc( int key, int x, int y ){
 	switch ( key ) {
@@ -78,18 +87,20 @@ void mySpecialKeyFunc( int key, int x, int y ){
 }
 
 
-// void mouseMovement(int _x, int _y) {
-// 	viewAngle_horizontal+=(_x-window_h/2)*0.0003;
-// 	viewAngle_vertical+=(_y-window_h/2)*0.0003;
+void mouseMovement(int _x, int _y) {
+	//printf("moving\n");
+ 	viewAngle_horizontal+=(_x-window_h/2)*0.0003;
+ 	viewAngle_vertical+=(_y-window_h/2)*0.0003;
 
-// 	CGSetLocalEventsSuppressionInterval(0.0);
-// 	glutWarpPointer(window_h/2,window_w/2);
-// 	eye_ed[0]=sin(viewAngle_horizontal)*40;
-// 	eye_ed[1]=cos(viewAngle_horizontal)*40;
+ 	CGSetLocalEventsSuppressionInterval(0.0);
+ 	glutWarpPointer(window_h/2,window_w/2);
+ 	glutPostRedisplay();
+ 	// eye_ed[0]=sin(viewAngle_horizontal)*40;
+ 	// eye_ed[1]=cos(viewAngle_horizontal)*40;
 
-// 	eye_ed[1]+=(1-cos(viewAngle_vertical))*40;
-// 	eye_ed[2]=-sin(viewAngle_vertical)*40;
-// 	printf("vert: %f hor: %f\n",viewAngle_vertical,viewAngle_horizontal);
-// 	printf("vert: %d hor: %d\n",_x,_y);
-// }
+ 	// eye_ed[1]+=(1-cos(viewAngle_vertical))*40;
+ 	// eye_ed[2]=-sin(viewAngle_vertical)*40;
+ 	// printf("vert: %f hor: %f\n",viewAngle_vertical,viewAngle_horizontal);
+ 	// printf("vert: %d hor: %d\n",_x,_y);
+}
 

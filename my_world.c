@@ -24,9 +24,9 @@ int RunMode = 1;		// Used as a boolean (1 or 0) for "on" and "off"
 // this to set initial view point
 double viewAngle_horizontal=0.30;//radiant
 double viewAngle_vertical=-0.39;//radiant
-double eye_distance=30;
 
-double eye[3]={0,0,0};// i suggest to use engle and distance to set pov and not this value
+double eye[3]={0,0,5};// i suggest to use engle and distance to set pov and not this value
+double eye_ed[3]={0,30,0};
 
 
 int window_h=720;
@@ -46,6 +46,7 @@ const GLfloat light_ambient[] = {0.3, 0.3, 0.3};
 const GLfloat light_0_col[] = {1.0, 1.0, 1.0};
 
 void drawScene(void){
+	locateCamera();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
 	if (RunMode==1){
@@ -61,9 +62,31 @@ void drawScene(void){
 
 	menu();// print the on screen menu
 
-	gluLookAt (eye[0], eye[1], eye[2], 0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+	gluLookAt (eye[0], eye[1], eye[2], eye_ed[0], eye_ed[1], eye_ed[2], 0.0, 0.0, 1.0);
+
+	glPushMatrix();
+		glTranslatef(10,0,0);
+		glRotatef(90, 0, 1, 0);
+		glBegin(GL_QUADS);
+			glVertex3f(-1.0, -1.0, 0.0);
+			glVertex3f(-1.0, 1.0, 0.0);
+			glVertex3f(1.0, 1.0, 0.0);
+			glVertex3f(1.0, -1.0, 0.0);
+		glEnd();
+	glPopMatrix();
+	glPushMatrix();
+		glTranslatef(-10,0,0);
+		glRotatef(90, 0, 1, 0);
+		glBegin(GL_QUADS);
+			glVertex3f(-1.0, -1.0, 0.0);
+			glVertex3f(-1.0, 1.0, 0.0);
+			glVertex3f(1.0, 1.0, 0.0);
+			glVertex3f(1.0, -1.0, 0.0);
+		glEnd();
+	glPopMatrix();
 
 	printGrass();
+	
 
     glFlush();
     glutSwapBuffers();
@@ -125,6 +148,8 @@ int main( int argc, char** argv ){
 	
 	glutKeyboardFunc(myKeyboardFunc);
 	glutSpecialFunc(mySpecialKeyFunc);
+	//glutMouseFunc(mouseClick);
+	glutPassiveMotionFunc(mouseMovement);
 
    	glutReshapeFunc( resizeWindow );
    	glutDisplayFunc( drawScene );

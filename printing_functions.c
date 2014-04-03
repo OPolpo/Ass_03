@@ -35,24 +35,21 @@ void printGrass(){
 	glPushAttrib(GL_LIGHTING_BIT);
 		GLfloat material_col[] = {1.0, 1.0, 1.0};
 		glMaterialfv(GL_FRONT, GL_EMISSION, material_col);
-
-
-
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, texName1);
-	glPushMatrix();
-		glBegin(GL_QUADS);
-			glTexCoord2f(0.0, 0.0); 
-			glVertex3f(-50.0, -50.0, 0.0);
-			glTexCoord2f(0.0, 10.0); 
-			glVertex3f(-50.0, 50.0, 0.0);
-			glTexCoord2f(10.0, 10.0); 
-			glVertex3f(50.0, 50.0, 0.0);
-			glTexCoord2f(10.0, 0.0); 
-			glVertex3f(50.0, -50.0, 0.0);
-		glEnd();
-	glPopMatrix();
-	glDisable(GL_TEXTURE_2D);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, texName1);
+		glPushMatrix();
+			glBegin(GL_QUADS);
+				glTexCoord2f(0.0, 0.0); 
+				glVertex3f(-50.0, -50.0, 0.0);
+				glTexCoord2f(0.0, 10.0); 
+				glVertex3f(-50.0, 50.0, 0.0);
+				glTexCoord2f(10.0, 10.0); 
+				glVertex3f(50.0, 50.0, 0.0);
+				glTexCoord2f(10.0, 0.0); 
+				glVertex3f(50.0, -50.0, 0.0);
+			glEnd();
+		glPopMatrix();
+		glDisable(GL_TEXTURE_2D);
 
 	glPopAttrib();
 }

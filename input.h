@@ -19,10 +19,9 @@
 	extern float AnimateStep;
 	extern double viewAngle_horizontal;
 	extern double viewAngle_vertical;
-	extern double eye_distance;
 	
 	
-	#define MOVEMENT_COEFFICIENT 0.05
+	#define MOVEMENT_COEFFICIENT 0.5
 	
 	extern int window_h;
 	extern int window_w;
