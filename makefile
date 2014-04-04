@@ -6,7 +6,7 @@ SDL_LIB= `sdl-config --libs`
 all: my_world clear
 
 input.o: input.c
-	$(CC) -c $^
+	$(CC) -c $^  $(SDL_INC) $(SDL_LIB)
 
 printing_functions.o: printing_functions.c
 	$(CC) -c $^ $(SDL_INC) $(SDL_LIB)

@@ -8,22 +8,73 @@
  */
 
 #include "printing_functions.h"
-#include <SDL.h>
-#include <SDL_image.h>
 
 #define PI 3.141592653589793238462643383
-int AXIS=0;
-int ORBIT=0;
-int TARDIS=0;
+
+int HALF=0;
 
 SDL_Surface* sdlimage;
 
 static GLuint texName1;
+static GLuint texTree0;
 static GLuint texTree1;
+static GLuint texTree2;
+static GLuint texTree3;
 static GLuint texCrowBar;
-static GLuint texName4;
+static GLuint texBuild;
 static GLuint texName5;
 
+const GLfloat light_0_col[] = {100.0, 100.0, 100.0};
+const GLfloat light_pos[] = {10.0, 50.0, 10.0, 1};
+
+
+void drawScene(void){
+	locateCamera();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+
+
+	HalfLifeCrowbar();
+
+	gluLookAt (eye[0], eye[1], eye[2], eye_ed[0], eye_ed[1], eye_ed[2], 0.0, 1.0, 0.0);
+
+	glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
+	glLightfv(GL_LIGHT0, GL_EMISSION, light_0_col);
+	
+
+	glPushMatrix();
+	glTranslatef(light_pos[0],light_pos[1],light_pos[2]);
+	glutSolidSphere(0.1,10,10); 
+	
+	glPopMatrix();
+	glPushMatrix();
+	glTranslatef(5,5,5);
+	glutSolidSphere(3,10,10); 
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(25,60,5);
+	glutSolidSphere(3,10,10); 
+	glPopMatrix();
+
+	//printGrass();
+	printTree(10,10,7,0);
+	printTree(-10,15,10,1);
+	printTree(-20,10,8,2);
+	printTree(-10,-19,3,3);
+	printHouse(-20,-20,6,10,30);
+	printGrass();
+
+	
+
+    glFlush();
+    glutSwapBuffers();
+
+}
 
 
 
@@ -32,84 +83,170 @@ static GLuint texName5;
  * This function print Grass.
  */
 void printGrass(){
-	glPushAttrib(GL_LIGHTING_BIT);
-		GLfloat material_col[] = {1.0, 1.0, 1.0};
-		glMaterialfv(GL_FRONT, GL_EMISSION, material_col);
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, texName1);
 		glPushMatrix();
 			glBegin(GL_QUADS);
+				glNormal3f(0,1,0);
 				glTexCoord2f(0.0, 0.0); 
-				glVertex3f(-50.0, -50.0, 0.0);
+				glVertex3f(-100.0, 0.0, -100.0);
 				glTexCoord2f(0.0, 10.0); 
-				glVertex3f(-50.0, 50.0, 0.0);
+				glVertex3f(-100.0, 0.0, 100.0);
 				glTexCoord2f(10.0, 10.0); 
-				glVertex3f(50.0, 50.0, 0.0);
+				glVertex3f(100.0, 0.0, 100.0);
 				glTexCoord2f(10.0, 0.0); 
-				glVertex3f(50.0, -50.0, 0.0);
+				glVertex3f(100.0, 0.0, -100.0);
 			glEnd();
 		glPopMatrix();
 		glDisable(GL_TEXTURE_2D);
-
-	glPopAttrib();
 }
 /**
  * @brief Print custom tree.
  * This function print a tree.
  */
-void printTree(int x, int y, int h){
-	glPushAttrib(GL_LIGHTING_BIT);
-		GLfloat material_col[] = {1.0, 1.0, 1.0, 0.0};
-		glMaterialfv(GL_FRONT, GL_EMISSION, material_col);
+void printTree(int x, int y, int h, int type){
 		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, texTree1);
-		glPushMatrix();
-			glTranslatef(x,y,h);
-			//glRotatef(135, 0, 0, 1);
-			glRotatef(-90, 1, 0, 0);
-			glBegin(GL_QUADS);
-				glTexCoord2f(0.0, 0.0); 
-				glVertex3f(-h*0.6, 0.0, 0.0);
-				glTexCoord2f(0.0, 1.0); 
-				glVertex3f(-h*0.6, h, 0.0);
-				glTexCoord2f(1.0, 1.0); 
-				glVertex3f(h*0.6, h, 0.0);
-				glTexCoord2f(1.0, 0.0); 
-				glVertex3f(h*0.6, 0.0, 0.0);
-			glEnd();
-		glPopMatrix();
-		glPushMatrix();
-			glTranslatef(x,y,h);
-			//glRotatef(135, 0, 0, 1);
-			glRotatef(90, 0, 1, 0);
-			glRotatef(-90, 0, 0, 1);
-			glBegin(GL_QUADS);
-				glTexCoord2f(0.0, 0.0); 
-				glVertex3f(-h*0.6, 0.0, 0.0);
-				glTexCoord2f(0.0, 1.0); 
-				glVertex3f(-h*0.6, h, 0.0);
-				glTexCoord2f(1.0, 1.0); 
-				glVertex3f(h*0.6, h, 0.0);
-				glTexCoord2f(1.0, 0.0); 
-				glVertex3f(h*0.6, 0.0, 0.0);
-			glEnd();
-		glPopMatrix();
+		switch(type){
+			case 0:
+				glBindTexture(GL_TEXTURE_2D, texTree0);
+			break;
+			case 1:
+				glBindTexture(GL_TEXTURE_2D, texTree1);
+			break;
+			case 2:
+				glBindTexture(GL_TEXTURE_2D, texTree2);
+			break;
+			case 3:
+				glBindTexture(GL_TEXTURE_2D, texTree3);
+			break;
+		}
+		int i=0;
+		int layer=4;
+		for(i=0;i<layer;i++){
+			glPushMatrix();
+				glTranslatef(x,h,y);
+				glRotatef(360/(2*layer)*i,0,1,0);
+				glRotatef(-180, 1, 0, 0);
+				glBegin(GL_QUADS);
+					glTexCoord2f(0.0, 0.0); 
+					glVertex3f(-h*0.6, 0.0, 0.0);
+					glTexCoord2f(0.0, 1.0); 
+					glVertex3f(-h*0.6, h, 0.0);
+					glTexCoord2f(1.0, 1.0); 
+					glVertex3f(h*0.6, h, 0.0);
+					glTexCoord2f(1.0, 0.0); 
+					glVertex3f(h*0.6, 0.0, 0.0);
+				glEnd();
+			glPopMatrix();
+		}
 		glDisable(GL_TEXTURE_2D);
-	glPopAttrib();
 }
 
+printHouse(int center_x, int center_y, int base_min, int base_max, int height){
+		glEnable(GL_TEXTURE_2D);
+		glMaterialfv(GL_FRONT, GL_SPECULAR, light_0_col);
+		glBindTexture(GL_TEXTURE_2D, texBuild);
+		int i=0;
+		int layer=4;
+		glPushMatrix();
+			glTranslatef(center_x,0,center_y);
+			glBegin(GL_QUADS);
+				glNormal3f(1,0,0);
+				glTexCoord2f(0.0, 0.0); 
+				glVertex3f(-base_max/2, 0.0, base_min/2);
+				glTexCoord2f(0.0, 1.0); 
+				glVertex3f(-base_max/2, height, base_min/2);
+				glTexCoord2f(1.0, 1.0); 
+				glVertex3f(base_max/2, height, base_min/2);
+				glTexCoord2f(1.0, 0.0); 
+				glVertex3f(base_max/2, 0.0, base_min/2);
+			glEnd();
+			glBegin(GL_TRIANGLES);
+				glNormal3f(base_min/2,base_min/2,0);
+				glTexCoord2f(0.0, 0.0); 
+				glVertex3f(-base_max/2, height, base_min/2);
+				glTexCoord2f(0.5, 1.0); 
+				glVertex3f(0, height+base_min, 0);
+				glTexCoord2f(1.0, 0.0); 
+				glVertex3f(base_max/2, height, base_min/2);
+			glEnd();
+
+			glBegin(GL_QUADS);
+				glNormal3f(-1,0,0);
+				glTexCoord2f(0.0, 0.0); 
+				glVertex3f(-base_max/2, 0.0, -base_min/2);
+				glTexCoord2f(0.0, 1.0); 
+				glVertex3f(-base_max/2, height, -base_min/2);
+				glTexCoord2f(1.0, 1.0); 
+				glVertex3f(base_max/2, height, -base_min/2);
+				glTexCoord2f(1.0, 0.0); 
+				glVertex3f(base_max/2, 0.0, -base_min/2);
+			glEnd();
+			glBegin(GL_TRIANGLES);
+				glNormal3f(-base_min/2,base_min/2,0);
+				glTexCoord2f(0.0, 0.0); 
+				glVertex3f(-base_max/2, height, -base_min/2);
+				glTexCoord2f(0.5, 1.0); 
+				glVertex3f(0, height+base_min, 0);
+				glTexCoord2f(1.0, 0.0); 
+				glVertex3f(base_max/2, height, -base_min/2);
+			glEnd();
+
+			glBegin(GL_QUADS);
+				glNormal3f(0,0,1);
+				glTexCoord2f(0.0, 0.0); 
+				glVertex3f(base_max/2, 0.0, -base_min/2);
+				glTexCoord2f(0.0, 1.0); 
+				glVertex3f(base_max/2, height, -base_min/2);
+				glTexCoord2f(1.0, 1.0); 
+				glVertex3f(base_max/2, height, base_min/2);
+				glTexCoord2f(1.0, 0.0); 
+				glVertex3f(base_max/2, 0.0, base_min/2);
+			glEnd();
+			glBegin(GL_TRIANGLES);
+				glNormal3f(0,base_min/2,base_max/2);
+				glTexCoord2f(0.0, 0.0); 
+				glVertex3f(base_max/2, height, -base_min/2);
+				glTexCoord2f(0.5, 1.0); 
+				glVertex3f(0, height+base_min, 0);
+				glTexCoord2f(1.0, 0.0); 
+				glVertex3f(base_max/2, height, base_min/2);
+			glEnd();
+
+
+			glBegin(GL_QUADS);
+				glNormal3f(0,0,-1);
+				glTexCoord2f(0.0, 0.0); 
+				glVertex3f(-base_max/2, 0.0, -base_min/2);
+				glTexCoord2f(0.0, 1.0); 
+				glVertex3f(-base_max/2, height, -base_min/2);
+				glTexCoord2f(1.0, 1.0); 
+				glVertex3f(-base_max/2, height, base_min/2);
+				glTexCoord2f(1.0, 0.0); 
+				glVertex3f(-base_max/2, 0.0, base_min/2);
+			glEnd();
+			glBegin(GL_TRIANGLES);
+				glNormal3f(0,base_min/2,-base_max/2);
+				glTexCoord2f(0.0, 0.0); 
+				glVertex3f(-base_max/2, height, -base_min/2);
+				glTexCoord2f(0.5, 1.0); 
+				glVertex3f(0, height+base_min, 0);
+				glTexCoord2f(1.0, 0.0); 
+				glVertex3f(-base_max/2, height, base_min/2);
+			glEnd();
+
+
+		glPopMatrix();	
+}
+
+
 HalfLifeCrowbar(){
-	glPushAttrib(GL_LIGHTING_BIT);
-		GLfloat material_col[] = {1.0, 1.0, 1.0, 0.0};
-		glMaterialfv(GL_FRONT, GL_EMISSION, material_col);
+	if(HALF){
+		glDisable(GL_LIGHTING);
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, texCrowBar);
 		glPushMatrix();
 			glTranslatef(0.4,-0.4,-1.0);
-			//glRotatef(135, 0, 0, 1);
-			//glRotatef(-15, 0, 0, 1);
-			//glRotatef(180, 1, 0, 0);
-			//glRotatef(180, 0, 1, 0);
 			glBegin(GL_QUADS);
 				glTexCoord2f(0.0, 0.0); 
 				glVertex3f(-0.2, -0.2, -0.0);
@@ -122,7 +259,8 @@ HalfLifeCrowbar(){
 			glEnd();
 		glPopMatrix();
 		glDisable(GL_TEXTURE_2D);
-	glPopAttrib();
+		glEnable(GL_LIGHTING);
+	}
 }
 
 
@@ -138,7 +276,7 @@ void createTexture(GLuint* text_name, char* file_path){
    	glBindTexture(GL_TEXTURE_2D, *text_name);
    	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
  	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, sdlimage->w, sdlimage->h, 0, GL_BGRA, GL_UNSIGNED_BYTE, sdlimage->pixels );
 }
@@ -149,70 +287,15 @@ void createTexture(GLuint* text_name, char* file_path){
  */
 void loadTexture(){
 	createTexture(&texName1,"./texture/grass.jpg");
+	createTexture(&texTree0,"./texture/tree0.png");
 	createTexture(&texTree1,"./texture/tree1.png");
+	createTexture(&texTree2,"./texture/tree2.png");
+	createTexture(&texTree3,"./texture/tree3.png");
 	createTexture(&texCrowBar,"./texture/crowbar2.png");
-	// createTexture(&texName4,"./texture/stars.png");
+	createTexture(&texBuild,"./texture/building.jpg");
 	// createTexture(&texName5,"./texture/Tardis.png");
 }
 
-
-
-
-
-
-
-
-
-
-
-//*****************************************************************
-//*****************************************************************
-//                           INUTILITY :)
-//*****************************************************************
-//*****************************************************************
-
-/**
- * The follow function are not commented cause are just random stuff
- * added to the original request of the assignment.
- */
-
-
-int enableOrbit(){
-	if(ORBIT){
-		ORBIT=1;
-		return 0;
-	}
-	ORBIT=1;
-	return 1;
-}
-
-void disableOrbit(){ORBIT=0;};
-
-
-void drawOrbit(double radius, GLfloat color[3]){
-	glDisable(GL_LIGHTING);
-	glPushMatrix();
-	glColor3f (color[0], color[1], color[2]);
-	glBegin(GL_LINES);
-		double i;
-		for(i = 0; i < 2 * PI; i += PI / 100)
- 			glVertex3f(cos(i) * radius, sin(i) * radius, 0.0);
-	glEnd();
-	glPopMatrix();
-	glEnable(GL_LIGHTING);
-}
-
-void drawAxis(double radius, GLfloat color[3]){
-	glDisable(GL_LIGHTING);
-	glPushMatrix();
-	glColor3f (color[0], color[1], color[2]);
-	glBegin( GL_LINES );
-		glVertex3f(0.0, 0.0, -2*radius);
-		glVertex3f(0.0, 0.0, +2*radius);
-	glEnd();
-	glPopMatrix();
-	glEnable(GL_LIGHTING);
-}
 
 void drawString (void * font, char *s, float x, float y, float z){
      unsigned int i;
@@ -222,48 +305,13 @@ void drawString (void * font, char *s, float x, float y, float z){
           glutBitmapCharacter (font, s[i]);
 }
 
-void menu()
-{
-	glDisable(GL_LIGHTING);
-	glDisable(GL_TEXTURE_2D);
-
- 	glColor3f( 1.0, 0.8, 0.5 );
-  	drawString(GLUT_BITMAP_HELVETICA_12, "Show Axis: 1       Show Orbit: 2         Enable Tardis: 3", -5, 5.3, -10);
-  	glColor3f( 1.0, 1.0, 1.0 );
-  	drawString(GLUT_BITMAP_HELVETICA_12, "Zoom: W/A          Horizontal: A/D       Vertical: C/V", -5, 4.9, -10);
-  	drawString(GLUT_BITMAP_HELVETICA_12, "Speed: Arrow Up/down", -5, 4.5, -10);
-  	glEnable(GL_TEXTURE_2D);
-
-  	glEnable(GL_LIGHTING);
-}
-
-// Just a simple joke
-void WHO(double angle){
-	if(TARDIS){
-		glPushAttrib(GL_LIGHTING_BIT);
-			GLfloat material_col[] = {1.0, 1.0, 1.0, 0.0};
-			glMaterialfv(GL_FRONT, GL_EMISSION, material_col);
-			glEnable(GL_TEXTURE_2D);
-			glBindTexture(GL_TEXTURE_2D, texName5);
-			glPushMatrix();
-				glRotatef(10*angle*0.9, 0, 0, 1);
-				glRotatef(10*angle*0.8, 0, 1, 0);
-				glRotatef(10*angle*0.5, 1, 0, 0);
-				glTranslatef(15,15,0);
-				glRotatef(135, 0, 0, 1);
-				glRotatef(-90, 1, 0, 0);
-				glBegin(GL_QUADS);
-					glTexCoord2f(0.0, 0.0); 
-					glVertex3f(-2.0, -1.0, 0.0);
-					glTexCoord2f(0.0, 1.0); 
-					glVertex3f(-2.0, 1.0, 0.0);
-					glTexCoord2f(1.0, 1.0); 
-					glVertex3f(0.0, 1.0, 0.0);
-					glTexCoord2f(1.0, 0.0); 
-					glVertex3f(0.0, -1.0, 0.0);
-				glEnd();
-			glPopMatrix();
-			glDisable(GL_TEXTURE_2D);
-		glPopAttrib();
+int enableHalf(){
+	if(HALF){
+		HALF=1;
+		return 0;
 	}
+	HALF=1;
+	return 1;
 }
+void disableHalf(){HALF=0;};
+

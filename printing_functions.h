@@ -1,5 +1,5 @@
-#ifndef PLANET_H
-	#define PLANET_H
+#ifndef PRINT_H
+	#define PRINT_H
 
 	#ifdef __APPLE__
 	#include <OpenGL/gl.h>
@@ -8,22 +8,17 @@
 	#else
 	#include <GL/glut.h>
 	#endif
+
 	#include <math.h>
+	#include <SDL.h>
+	#include <SDL_image.h>
+	#include "input.h"
+
 	
-	
-	void drawSun(double angle);
-	void drawEarth(double angle);
-	void drawMars(double angle);
-	void drawStars(double radius);
-	void WHO(double angle);
-	void drawOrbit(double radius, GLfloat color[3]);
-	
-	int enableOrbit();
-	void disableOrbit();
-	int enableAxis();
-	void disableAxis();
-	int enableTardis();
-	void disableTardis();
-	void menu();
+	void drawScene();
+	HalfLifeCrowbar();
+	printHouse(int center_x, int center_y, int base_min, int base_max, int height);
+	void printTree(int x, int y, int h, int type);
+	void printGrass();
 
 #endif

@@ -9,17 +9,14 @@
 	#else
 		#include <GL/glut.h>
 	#endif
+	
+	#include "printing_functions.h"
 
 	extern double eye[3];
 	extern double eye_ed[3];
-	extern int RunMode;
 	
-	extern float AnimationAngle;
-	extern float AnimateStep;
-	extern float AnimateStep;
 	extern double viewAngle_horizontal;
 	extern double viewAngle_vertical;
-	
 	
 	#define MOVEMENT_COEFFICIENT 0.5
 	

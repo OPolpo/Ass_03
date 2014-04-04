@@ -15,17 +15,15 @@
 
 #define SDL_main main //poi qualcuno me la dovrà spiegare sta cosa...
 
-// Function prototypes
-void drawScene(void);
-
-int RunMode = 1;		// Used as a boolean (1 or 0) for "on" and "off"
 
 // this to set initial view point
 double viewAngle_horizontal=0.30;//radiant
 double viewAngle_vertical=-0.39;//radiant
 
-double eye[3]={0,0,1.2};// i suggest to use engle and distance to set pov and not this value
-double eye_ed[3]={0,30,0};
+double eye[3]={0,1.2,0};// i suggest to use engle and distance to set pov and not this value
+double eye_ed[3]={0,0,30};
+
+const GLfloat material_col[] = {1.0, 1.0, 1.0};
 
 
 int window_h=720;
@@ -40,92 +38,26 @@ const double Xmin = -10.0, Xmax = 10.0;
 const double Ymin = -10.0, Ymax = 10.0;
 
 
-const GLfloat light_pos[] = {0.0, 0.0, 0.0};
-const GLfloat light_ambient[] = {0.3, 0.3, 0.3};
-const GLfloat light_0_col[] = {1.0, 1.0, 1.0};
-
-void drawScene(void){
-	locateCamera();
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
-	if (RunMode==1){
-    	AnimationAngle += AnimateStep;
-		if (AnimationAngle > 360.0)
- 			AnimationAngle -= 360.0*floor(AnimationAngle/360.0);
- 	}
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-	
-
-	menu();// print the on screen menu
-
-
-	HalfLifeCrowbar();
-	gluLookAt (eye[0], eye[1], eye[2], eye_ed[0], eye_ed[1], eye_ed[2], 0.0, 0.0, 1.0);
-
-	glPushMatrix();
-		glTranslatef(10,0,0);
-		glRotatef(90, 0, 1, 0);
-		glBegin(GL_QUADS);
-			glVertex3f(-1.0, -1.0, 0.0);
-			glVertex3f(-1.0, 1.0, 0.0);
-			glVertex3f(1.0, 1.0, 0.0);
-			glVertex3f(1.0, -1.0, 0.0);
-		glEnd();
-	glPopMatrix();
-	glPushMatrix();
-		glTranslatef(-10,0,0);
-		glRotatef(90, 0, 1, 0);
-		glBegin(GL_QUADS);
-			glVertex3f(-1.0, -1.0, 0.0);
-			glVertex3f(-1.0, 1.0, 0.0);
-			glVertex3f(1.0, 1.0, 0.0);
-			glVertex3f(1.0, -1.0, 0.0);
-		glEnd();
-	glPopMatrix();
-	printGrass();
-	printTree(10,10,7);
-	printTree(-10,15,10);
-	printTree(-20,10,8);
-	printTree(-10,-19,9);
-	
-
-	
-
-    glFlush();
-    glutSwapBuffers();
-
-    if (RunMode==1){
- 		glutPostRedisplay();
- 	}
-}
-
+const GLfloat light_ambient[] = {0.2, 0.2, 0.2};
 
 void initRendering(){
 	glutSetCursor(GLUT_CURSOR_NONE); // to pin the mouse at the center of the screen
 
-    glShadeModel(GL_FLAT);
+    glShadeModel(GL_SMOOTH);
     glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
-	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_NORMALIZE);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 	glEnable (GL_ALPHA_TEST) ;
 	glAlphaFunc(GL_GREATER, 0.0f);
-
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
-	glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
-	glLightfv(GL_LIGHT0, GL_EMISSION, light_0_col);
 	glEnable(GL_COLOR_MATERIAL);
 
-	
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, light_ambient);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, material_col);
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, light_ambient);
 	
 	locateCamera();
@@ -157,7 +89,6 @@ int main( int argc, char** argv ){
  	initRendering();
 	
 	glutKeyboardFunc(myKeyboardFunc);
-	glutSpecialFunc(mySpecialKeyFunc);
 	//glutMouseFunc(mouseClick);
 	glutPassiveMotionFunc(mouseMovement);
 
