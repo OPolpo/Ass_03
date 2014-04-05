@@ -22,10 +22,10 @@ static GLuint texTree2;
 static GLuint texTree3;
 static GLuint texCrowBar;
 static GLuint texBuild;
-static GLuint texName5;
+static GLuint texSky;
 
 const GLfloat light_0_col[] = {100.0, 100.0, 100.0};
-const GLfloat light_pos[] = {10.0, 50.0, 10.0, 1};
+const GLfloat light_pos[] = {-80.0, 48.0, -45.0, 1};
 
 
 void drawScene(void){
@@ -53,7 +53,7 @@ void drawScene(void){
 	glPopMatrix();
 	glPushMatrix();
 	glTranslatef(5,5,5);
-	glutSolidSphere(3,10,10); 
+	glutSolidSphere(3,1000,1000); 
 	glPopMatrix();
 
 	glPushMatrix();
@@ -67,6 +67,7 @@ void drawScene(void){
 	printTree(-20,10,8,2);
 	printTree(-10,-19,3,3);
 	printHouse(-20,-20,6,10,30);
+	underTheDome();
 	printGrass();
 
 	
@@ -154,11 +155,11 @@ printHouse(int center_x, int center_y, int base_min, int base_max, int height){
 				glNormal3f(1,0,0);
 				glTexCoord2f(0.0, 0.0); 
 				glVertex3f(-base_max/2, 0.0, base_min/2);
-				glTexCoord2f(0.0, 1.0); 
+				glTexCoord2f(0.0, 40.0); 
 				glVertex3f(-base_max/2, height, base_min/2);
-				glTexCoord2f(1.0, 1.0); 
+				glTexCoord2f(20.0, 40.0); 
 				glVertex3f(base_max/2, height, base_min/2);
-				glTexCoord2f(1.0, 0.0); 
+				glTexCoord2f(20.0, 0.0); 
 				glVertex3f(base_max/2, 0.0, base_min/2);
 			glEnd();
 			glBegin(GL_TRIANGLES);
@@ -239,6 +240,26 @@ printHouse(int center_x, int center_y, int base_min, int base_max, int height){
 		glPopMatrix();	
 }
 
+void underTheDome(){
+	//i'm not a big fan of the series but after breaking bad i start to whatch it.
+
+	glPushAttrib(GL_LIGHTING_BIT);
+		GLfloat material_col[] = {1.0, 1.0, 1.0};
+		glMaterialfv(GL_FRONT, GL_EMISSION, material_col);
+		glPushMatrix();
+			GLUquadric *qobj = gluNewQuadric();
+			gluQuadricTexture(qobj,GL_TRUE); 
+			glRotatef(90, 1, 0, 0);
+			glEnable(GL_TEXTURE_2D);
+				glBindTexture(GL_TEXTURE_2D,texSky);
+				gluSphere(qobj,100,1000,1000); 
+				//	drawBox(50, GL_QUADS);
+				gluDeleteQuadric(qobj); 
+			glDisable(GL_TEXTURE_2D);
+		glPopMatrix();
+	glPopAttrib();
+
+}
 
 HalfLifeCrowbar(){
 	if(HALF){
@@ -292,8 +313,8 @@ void loadTexture(){
 	createTexture(&texTree2,"./texture/tree2.png");
 	createTexture(&texTree3,"./texture/tree3.png");
 	createTexture(&texCrowBar,"./texture/crowbar2.png");
-	createTexture(&texBuild,"./texture/building.jpg");
-	// createTexture(&texName5,"./texture/Tardis.png");
+	createTexture(&texBuild,"./texture/window.jpg");
+	createTexture(&texSky,"./texture/sky2.jpg");
 }
 
 

@@ -49,14 +49,15 @@ void initRendering(){
 	glEnable(GL_LIGHT0);
 	glEnable(GL_NORMALIZE);
 
+	//this stuff is for alpha channel
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable (GL_ALPHA_TEST) ;
 	glAlphaFunc(GL_GREATER, 0.0f);
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
-	glEnable(GL_COLOR_MATERIAL);
 
+	glEnable(GL_COLOR_MATERIAL);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, material_col);
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, light_ambient);
 	
@@ -72,7 +73,7 @@ void resizeWindow(int w, int h){
 	
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(60.0,w/h,1,100);
+    gluPerspective(60.0,w/h,1,200);
 	
 }
 
@@ -84,7 +85,7 @@ int main( int argc, char** argv ){
 
     glutInitWindowPosition(10, 60);
 	glutInitWindowSize(window_h, window_h);
-  	glutCreateWindow("Planetary");
+  	glutCreateWindow("My little BIG world");
 
  	initRendering();
 	
