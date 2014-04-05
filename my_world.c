@@ -41,13 +41,16 @@ const double Ymin = -10.0, Ymax = 10.0;
 const GLfloat light_ambient[] = {0.2, 0.2, 0.2};
 
 void initRendering(){
-	glutSetCursor(GLUT_CURSOR_NONE); // to pin the mouse at the center of the screen
+	locateCamera();
 
+	glutSetCursor(GLUT_CURSOR_NONE); // to pin the mouse at the center of the screen
+	
     glShadeModel(GL_SMOOTH);
     glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 	glEnable(GL_NORMALIZE);
+	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
 
 	//this stuff is for alpha channel
 	glEnable(GL_BLEND);
@@ -60,6 +63,7 @@ void initRendering(){
 	glEnable(GL_COLOR_MATERIAL);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, material_col);
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, light_ambient);
+
 	
 	locateCamera();
 	loadTexture();
@@ -91,6 +95,7 @@ int main( int argc, char** argv ){
 	
 	glutKeyboardFunc(myKeyboardFunc);
 	//glutMouseFunc(mouseClick);
+	glutSpecialFunc(mySpecialKeyFunc);
 	glutPassiveMotionFunc(mouseMovement);
 
    	glutReshapeFunc( resizeWindow );

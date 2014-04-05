@@ -66,7 +66,9 @@ void drawScene(void){
 	printTree(-10,15,10,1);
 	printTree(-20,10,8,2);
 	printTree(-10,-19,3,3);
+	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 	printHouse(-20,-20,6,10,30);
+	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
 	underTheDome();
 	printGrass();
 
@@ -85,6 +87,7 @@ void drawScene(void){
  */
 void printGrass(){
 		glEnable(GL_TEXTURE_2D);
+		glMaterialfv(GL_FRONT, GL_DIFFUSE, light_0_col);
 		glBindTexture(GL_TEXTURE_2D, texName1);
 		glPushMatrix();
 			glBegin(GL_QUADS);
@@ -145,14 +148,16 @@ void printTree(int x, int y, int h, int type){
 
 printHouse(int center_x, int center_y, int base_min, int base_max, int height){
 		glEnable(GL_TEXTURE_2D);
-		glMaterialfv(GL_FRONT, GL_SPECULAR, light_0_col);
+		//glMaterialfv(GL_FRONT, GL_SPECULAR, light_0_col);
 		glBindTexture(GL_TEXTURE_2D, texBuild);
 		int i=0;
 		int layer=4;
 		glPushMatrix();
 			glTranslatef(center_x,0,center_y);
+
+			//lato lungo
 			glBegin(GL_QUADS);
-				glNormal3f(1,0,0);
+				glNormal3f(-1,0,0);
 				glTexCoord2f(0.0, 0.0); 
 				glVertex3f(-base_max/2, 0.0, base_min/2);
 				glTexCoord2f(0.0, 40.0); 
@@ -163,7 +168,7 @@ printHouse(int center_x, int center_y, int base_min, int base_max, int height){
 				glVertex3f(base_max/2, 0.0, base_min/2);
 			glEnd();
 			glBegin(GL_TRIANGLES);
-				glNormal3f(base_min/2,base_min/2,0);
+				glNormal3f(-base_min/2,base_min/2,0);
 				glTexCoord2f(0.0, 0.0); 
 				glVertex3f(-base_max/2, height, base_min/2);
 				glTexCoord2f(0.5, 1.0); 
@@ -172,15 +177,16 @@ printHouse(int center_x, int center_y, int base_min, int base_max, int height){
 				glVertex3f(base_max/2, height, base_min/2);
 			glEnd();
 
+			//long sides
 			glBegin(GL_QUADS);
 				glNormal3f(-1,0,0);
 				glTexCoord2f(0.0, 0.0); 
 				glVertex3f(-base_max/2, 0.0, -base_min/2);
-				glTexCoord2f(0.0, 1.0); 
+				glTexCoord2f(0.0, 40.0); 
 				glVertex3f(-base_max/2, height, -base_min/2);
-				glTexCoord2f(1.0, 1.0); 
+				glTexCoord2f(20.0, 40.0); 
 				glVertex3f(base_max/2, height, -base_min/2);
-				glTexCoord2f(1.0, 0.0); 
+				glTexCoord2f(20.0, 0.0); 
 				glVertex3f(base_max/2, 0.0, -base_min/2);
 			glEnd();
 			glBegin(GL_TRIANGLES);
@@ -193,15 +199,16 @@ printHouse(int center_x, int center_y, int base_min, int base_max, int height){
 				glVertex3f(base_max/2, height, -base_min/2);
 			glEnd();
 
+			//short sides
 			glBegin(GL_QUADS);
 				glNormal3f(0,0,1);
 				glTexCoord2f(0.0, 0.0); 
 				glVertex3f(base_max/2, 0.0, -base_min/2);
-				glTexCoord2f(0.0, 1.0); 
+				glTexCoord2f(0.0, 40.0); 
 				glVertex3f(base_max/2, height, -base_min/2);
-				glTexCoord2f(1.0, 1.0); 
+				glTexCoord2f(20.0, 40.0); 
 				glVertex3f(base_max/2, height, base_min/2);
-				glTexCoord2f(1.0, 0.0); 
+				glTexCoord2f(20.0, 0.0); 
 				glVertex3f(base_max/2, 0.0, base_min/2);
 			glEnd();
 			glBegin(GL_TRIANGLES);
@@ -214,20 +221,19 @@ printHouse(int center_x, int center_y, int base_min, int base_max, int height){
 				glVertex3f(base_max/2, height, base_min/2);
 			glEnd();
 
-
 			glBegin(GL_QUADS);
-				glNormal3f(0,0,-1);
+				glNormal3f(0,0,1);
 				glTexCoord2f(0.0, 0.0); 
 				glVertex3f(-base_max/2, 0.0, -base_min/2);
-				glTexCoord2f(0.0, 1.0); 
+				glTexCoord2f(0.0, 40.0); 
 				glVertex3f(-base_max/2, height, -base_min/2);
-				glTexCoord2f(1.0, 1.0); 
+				glTexCoord2f(20.0, 40.0); 
 				glVertex3f(-base_max/2, height, base_min/2);
-				glTexCoord2f(1.0, 0.0); 
+				glTexCoord2f(20.0, 0.0); 
 				glVertex3f(-base_max/2, 0.0, base_min/2);
 			glEnd();
 			glBegin(GL_TRIANGLES);
-				glNormal3f(0,base_min/2,-base_max/2);
+				glNormal3f(0,base_min/2,base_max/2);
 				glTexCoord2f(0.0, 0.0); 
 				glVertex3f(-base_max/2, height, -base_min/2);
 				glTexCoord2f(0.5, 1.0); 
@@ -242,7 +248,6 @@ printHouse(int center_x, int center_y, int base_min, int base_max, int height){
 
 void underTheDome(){
 	//i'm not a big fan of the series but after breaking bad i start to whatch it.
-
 	glPushAttrib(GL_LIGHTING_BIT);
 		GLfloat material_col[] = {1.0, 1.0, 1.0};
 		glMaterialfv(GL_FRONT, GL_EMISSION, material_col);
