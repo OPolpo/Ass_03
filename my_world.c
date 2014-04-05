@@ -41,10 +41,9 @@ const double Ymin = -10.0, Ymax = 10.0;
 const GLfloat light_ambient[] = {0.2, 0.2, 0.2};
 
 void initRendering(){
-	locateCamera();
 
 	glutSetCursor(GLUT_CURSOR_NONE); // to pin the mouse at the center of the screen
-	
+
     glShadeModel(GL_SMOOTH);
     glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
@@ -96,6 +95,7 @@ int main( int argc, char** argv ){
 	glutKeyboardFunc(myKeyboardFunc);
 	//glutMouseFunc(mouseClick);
 	glutSpecialFunc(mySpecialKeyFunc);
+	//glutSpecialUpFunc(keySpecialUp);
 	glutPassiveMotionFunc(mouseMovement);
 
    	glutReshapeFunc( resizeWindow );

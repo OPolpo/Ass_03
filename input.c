@@ -2,8 +2,7 @@
 
 double eye_distance=30;
 double eye_inc=0;
-
-
+//int keySpecialStates[256];
 void myKeyboardFunc(unsigned char key, int x, int y){
 	switch ( key ) {
 	case '1':
@@ -69,12 +68,44 @@ void mouseMovement(int _x, int _y) {
  	glutPostRedisplay();
 }
 
+// void lookUp(){
+// 	if(keySpecialStates[GLUT_KEY_UP]==1){
+// 		if(viewAngle_vertical>-1.5)// everybody know that PI/2 is 1.5 :D
+// 			viewAngle_vertical+=0.03;
+// 	}
+// }
+
+// void lookDown(){
+// 	if(keySpecialStates[GLUT_KEY_DOWN]==1)
+// 		if(viewAngle_vertical<1.5)// everybody know that PI/2 is 1.5 :D
+// 			viewAngle_vertical-=0.03;
+// }
+
+// void turnLeft(){
+// 	if(keySpecialStates[GLUT_KEY_LEFT]==1)
+// 		viewAngle_horizontal+=0.03;
+// }
+
+// void turnRight(){
+// 	if(keySpecialStates[GLUT_KEY_RIGHT]==1)
+// 		viewAngle_horizontal-=0.03;
+// }
+
+
+// void keySpecialUp(unsigned char key, int x, int y){
+// 	//printf("salgo\n");
+
+// 	keySpecialStates[key] = 1;
+// }
+
 void mySpecialKeyFunc( int key, int x, int y ){
-	switch (key) {
+	//printf("scendo\n");
+	//keySpecialStates[key] = 0;
+	switch(key){
 	case GLUT_KEY_UP:
 		if(viewAngle_vertical>-1.5)// everybody know that PI/2 is 1.5 :D
 			viewAngle_vertical-=0.03;
-		locateCamera();	
+		locateCamera();
 	break;
 	case GLUT_KEY_DOWN:
 		if(viewAngle_vertical<1.5)// everybody know that PI/2 is 1.5 :D
@@ -82,11 +113,11 @@ void mySpecialKeyFunc( int key, int x, int y ){
 		locateCamera();
 	break;
 	case GLUT_KEY_LEFT:
-		viewAngle_horizontal+=0.03;
+		viewAngle_horizontal-=0.03;
 		locateCamera();
 	break;
 	case GLUT_KEY_RIGHT:
-		viewAngle_horizontal-=0.03;
+		viewAngle_horizontal+=0.03;
 		locateCamera();
 	break;
 	}

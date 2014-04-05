@@ -22,14 +22,16 @@ static GLuint texTree2;
 static GLuint texTree3;
 static GLuint texCrowBar;
 static GLuint texBuild;
+static GLuint texRoof;
+static GLuint texSwim;
 static GLuint texSky;
+
 
 const GLfloat light_0_col[] = {100.0, 100.0, 100.0};
 const GLfloat light_pos[] = {-80.0, 48.0, -45.0, 1};
 
 
-void drawScene(void){
-	locateCamera();
+void drawScene(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
@@ -63,11 +65,39 @@ void drawScene(void){
 
 	//printGrass();
 	printTree(10,10,7,0);
-	printTree(-10,15,10,1);
+	printTree(-30,15,10,1);
 	printTree(-20,10,8,2);
 	printTree(-10,-19,3,3);
+	printTree(30,30,5,0);
+	printTree(-25,25,6,2);
+	printTree(35,30,7,0);
+	printTree(14,-30,8,2);
+	printTree(13,-10,7,0);
+	printTree(-14,14,10,1);
+	printTree(-20,19,8,2);
+	printTree(-15,-19,3,3);
+	printTree(24,30,5,0);
+	printTree(-21,27,6,2);
+	printTree(19,22,7,0);
+	printTree(8,-17,8,2);
+	printTree(50,10,7,0);
+	printTree(-50,15,10,1);
+	printTree(-50,10,8,2);
+	printTree(-50,-19,3,3);
+	printTree(50,30,5,0);
+	printTree(-55,25,6,2);
+	printTree(55,30,7,0);
+	printTree(54,-30,8,2);
+
+	//near the swimming pool
+	printTree(-10,30,3,3);
+	printTree(10,30,3,3);
+	printTree(-10,40,3,3);
+	printTree(10,40,3,3);
+
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
-	printHouse(-20,-20,6,10,30);
+	printHouse(0,0,8,15,5);
+	printSwimmingPool(0,35,8,15);
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
 	underTheDome();
 	printGrass();
@@ -76,7 +106,7 @@ void drawScene(void){
 
     glFlush();
     glutSwapBuffers();
-
+    locateCamera();
 }
 
 
@@ -149,35 +179,38 @@ void printTree(int x, int y, int h, int type){
 printHouse(int center_x, int center_y, int base_min, int base_max, int height){
 		glEnable(GL_TEXTURE_2D);
 		//glMaterialfv(GL_FRONT, GL_SPECULAR, light_0_col);
-		glBindTexture(GL_TEXTURE_2D, texBuild);
+		
 		int i=0;
-		int layer=4;
+		int top=height+2;
 		glPushMatrix();
 			glTranslatef(center_x,0,center_y);
 
-			//lato lungo
+			//long sides
+			glBindTexture(GL_TEXTURE_2D, texBuild);
 			glBegin(GL_QUADS);
 				glNormal3f(-1,0,0);
 				glTexCoord2f(0.0, 0.0); 
 				glVertex3f(-base_max/2, 0.0, base_min/2);
-				glTexCoord2f(0.0, 40.0); 
+				glTexCoord2f(0.0, 2.0); 
 				glVertex3f(-base_max/2, height, base_min/2);
-				glTexCoord2f(20.0, 40.0); 
+				glTexCoord2f(10.0, 2.0); 
 				glVertex3f(base_max/2, height, base_min/2);
-				glTexCoord2f(20.0, 0.0); 
+				glTexCoord2f(10.0, 0.0); 
 				glVertex3f(base_max/2, 0.0, base_min/2);
 			glEnd();
+			glBindTexture(GL_TEXTURE_2D, texRoof);
 			glBegin(GL_TRIANGLES);
-				glNormal3f(-base_min/2,base_min/2,0);
-				glTexCoord2f(0.0, 0.0); 
+				glNormal3f(-base_min/2,top-height,0);
+				glTexCoord2f(0.0, 1.2); 
 				glVertex3f(-base_max/2, height, base_min/2);
-				glTexCoord2f(0.5, 1.0); 
-				glVertex3f(0, height+base_min, 0);
 				glTexCoord2f(1.0, 0.0); 
+				glVertex3f(0, top, 0);
+				glTexCoord2f(2.0, 1.2); 
 				glVertex3f(base_max/2, height, base_min/2);
 			glEnd();
 
-			//long sides
+			
+			glBindTexture(GL_TEXTURE_2D, texBuild);
 			glBegin(GL_QUADS);
 				glNormal3f(-1,0,0);
 				glTexCoord2f(0.0, 0.0); 
@@ -189,17 +222,19 @@ printHouse(int center_x, int center_y, int base_min, int base_max, int height){
 				glTexCoord2f(20.0, 0.0); 
 				glVertex3f(base_max/2, 0.0, -base_min/2);
 			glEnd();
+			glBindTexture(GL_TEXTURE_2D, texRoof);
 			glBegin(GL_TRIANGLES);
-				glNormal3f(-base_min/2,base_min/2,0);
-				glTexCoord2f(0.0, 0.0); 
+				glNormal3f(-base_min/2,top-height,0);
+				glTexCoord2f(0.0, 1.2); 
 				glVertex3f(-base_max/2, height, -base_min/2);
-				glTexCoord2f(0.5, 1.0); 
-				glVertex3f(0, height+base_min, 0);
 				glTexCoord2f(1.0, 0.0); 
+				glVertex3f(0, top, 0);
+				glTexCoord2f(2.0, 1.2); 
 				glVertex3f(base_max/2, height, -base_min/2);
 			glEnd();
 
 			//short sides
+			glBindTexture(GL_TEXTURE_2D, texBuild);
 			glBegin(GL_QUADS);
 				glNormal3f(0,0,1);
 				glTexCoord2f(0.0, 0.0); 
@@ -211,16 +246,18 @@ printHouse(int center_x, int center_y, int base_min, int base_max, int height){
 				glTexCoord2f(20.0, 0.0); 
 				glVertex3f(base_max/2, 0.0, base_min/2);
 			glEnd();
+			glBindTexture(GL_TEXTURE_2D, texRoof);
 			glBegin(GL_TRIANGLES);
-				glNormal3f(0,base_min/2,base_max/2);
-				glTexCoord2f(0.0, 0.0); 
+				glNormal3f(0,top-height,base_max/2);
+				glTexCoord2f(0.0, 2.0); 
 				glVertex3f(base_max/2, height, -base_min/2);
-				glTexCoord2f(0.5, 1.0); 
-				glVertex3f(0, height+base_min, 0);
 				glTexCoord2f(1.0, 0.0); 
+				glVertex3f(0, top, 0);
+				glTexCoord2f(2.0, 2.0); 
 				glVertex3f(base_max/2, height, base_min/2);
 			glEnd();
 
+			glBindTexture(GL_TEXTURE_2D, texBuild);
 			glBegin(GL_QUADS);
 				glNormal3f(0,0,1);
 				glTexCoord2f(0.0, 0.0); 
@@ -232,19 +269,41 @@ printHouse(int center_x, int center_y, int base_min, int base_max, int height){
 				glTexCoord2f(20.0, 0.0); 
 				glVertex3f(-base_max/2, 0.0, base_min/2);
 			glEnd();
+			glBindTexture(GL_TEXTURE_2D, texRoof);
 			glBegin(GL_TRIANGLES);
-				glNormal3f(0,base_min/2,base_max/2);
-				glTexCoord2f(0.0, 0.0); 
+				glNormal3f(0,top-height,base_max/2);
+				glTexCoord2f(0.0, 2.0); 
 				glVertex3f(-base_max/2, height, -base_min/2);
-				glTexCoord2f(0.5, 1.0); 
-				glVertex3f(0, height+base_min, 0);
 				glTexCoord2f(1.0, 0.0); 
+				glVertex3f(0, top, 0);
+				glTexCoord2f(2.0, 2.0); 
 				glVertex3f(-base_max/2, height, base_min/2);
 			glEnd();
-
-
 		glPopMatrix();	
 }
+
+void printSwimmingPool(int center_x, int center_y, int base_min, int base_max){
+		glEnable(GL_TEXTURE_2D);
+		//glMaterialfv(GL_FRONT, GL_SPECULAR, light_0_col);
+		glPushMatrix();
+			glTranslatef(center_x,0.01,center_y);//i know it's very ugly bidimensional swimmingpool
+			//long sides
+			glBindTexture(GL_TEXTURE_2D, texSwim);
+			glBegin(GL_QUADS);
+				glNormal3f(0,1,0);
+				glTexCoord2f(0.0, 0.0); 
+				glVertex3f(-base_max/2, 0.0, -base_min/2);
+				glTexCoord2f(0.0, 1.0); 
+				glVertex3f(-base_max/2, 0, base_min/2);
+				glTexCoord2f(1.0, 1.0); 
+				glVertex3f(base_max/2, 0, base_min/2);
+				glTexCoord2f(1.0, 0.0); 
+				glVertex3f(base_max/2, 0.0, -base_min/2);
+			glEnd();
+		glPopMatrix();	
+
+}
+
 
 void underTheDome(){
 	//i'm not a big fan of the series but after breaking bad i start to whatch it.
@@ -318,7 +377,9 @@ void loadTexture(){
 	createTexture(&texTree2,"./texture/tree2.png");
 	createTexture(&texTree3,"./texture/tree3.png");
 	createTexture(&texCrowBar,"./texture/crowbar2.png");
-	createTexture(&texBuild,"./texture/window.jpg");
+	createTexture(&texBuild,"./texture/build.jpg");
+	createTexture(&texRoof,"./texture/roof.jpg");
+	createTexture(&texSwim,"./texture/water.jpg");
 	createTexture(&texSky,"./texture/sky2.jpg");
 }
 

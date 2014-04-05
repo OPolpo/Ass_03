@@ -18,6 +18,7 @@
 	void drawScene();
 	HalfLifeCrowbar();
 	printHouse(int center_x, int center_y, int base_min, int base_max, int height);
+	void printSwimmingPool(int center_x, int center_y, int base_min, int base_max);
 	void printTree(int x, int y, int h, int type);
 	void printGrass();
 	void underTheDome();
