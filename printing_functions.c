@@ -1,5 +1,5 @@
 /**
- * @file planets.c
+ * @file printing_functions.c
  * @author Andrea Bocchese
  * @date 31 Mar 2014
  * @brief draw house and other stuff

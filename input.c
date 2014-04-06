@@ -1,7 +1,19 @@
+/**
+ * @file input.c
+ * @author Andrea Bocchese
+ * @date 31 Mar 2014
+ * @brief contains control key.
+ *
+ * In this file there are the function the control the movement of the camera and other control
+ */
+
 #include "input.h"
 
 double eye_distance=30;//can be any value... it's just a radius of the sphere used to compute the coordinate, i'ts the distance from the observer and the observed.
 
+/**
+ * @brief detect the key pressed and do some stuff, like move the camera.
+ */
 void myKeyboardFunc(unsigned char key, int x, int y){
 	switch ( key ) {
 	case '1':
@@ -74,7 +86,7 @@ void mouseMovement(int _x, int _y) {
 }
 
 /**
- * @brief detect the key pressed and do some stuff.
+ * @brief detect the special key pressed and do some stuff.
  */
 void mySpecialKeyFunc( int key, int x, int y ){
 	//printf("scendo\n");
