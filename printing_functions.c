@@ -9,18 +9,19 @@
 
 #include "printing_functions.h"
 
-int HALF=0;
+int HALF=0;//just an inutility variable to enable on screen crowbar
 
 SDL_Surface* sdlimage;
 
+//nature
 static GLuint texGrass1;
 static GLuint texGrass2;
 static GLuint texTree0;
 static GLuint texTree1;
 static GLuint texTree2;
-static GLuint texTree3;
-static GLuint texCrowBar;
+static GLuint texTree3;//bush
 
+//house stuff
 static GLuint texBuild;
 static GLuint texParquet;
 static GLuint texDoor;
@@ -28,6 +29,7 @@ static GLuint texRoof;
 static GLuint texGround3;
 static GLuint texSchermatura;
 
+//external house stuff
 static GLuint texSwim;
 static GLuint texFence;
 static GLuint texHedge;
@@ -36,6 +38,8 @@ static GLuint texStoneGround;
 static GLuint texPath;
 static GLuint texSky;
 
+//inutility
+static GLuint texCrowBar;
 
 const GLfloat light_0_col[] = {100.0, 100.0, 100.0};
 const GLfloat light_pos[] = {-80.0, 48.0, -45.0, 1};
@@ -48,16 +52,14 @@ void drawScene(){
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-
-
-	HalfLifeCrowbar();
+	HalfLifeCrowbar();//this pront crowbar (only if HALF is != 0)
 
 	gluLookAt (eye[0], eye[1], eye[2], eye_ed[0], eye_ed[1], eye_ed[2], 0.0, 1.0, 0.0);
 
 	glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
 	glLightfv(GL_LIGHT0, GL_EMISSION, light_0_col);
 	
-
+	// //this print a little sphere to localize the sun (now is outside the dome)
 	// glPushMatrix();
 	// glTranslatef(light_pos[0],light_pos[1],light_pos[2]); //to see where the light is
 	// glutSolidSphere(0.1,10,10); 
@@ -67,6 +69,8 @@ void drawScene(){
 	printTree(20,-20,12,0);
 	printTree(-20,-20,12,0);
 
+
+	//randome tree in the world
 	printTree(-30,45,10,1);
 	printTree(-20,33,8,2);
 	printTree(-10,-49,3,3);
@@ -77,11 +81,9 @@ void drawScene(){
 	printTree(13,-40,7,0);
 	printTree(-14,54,10,1);
 	printTree(-20,19,8,2);
-	//printTree(-15,-19,3,3);
 	printTree(24,30,5,0);
 	printTree(-21,27,6,2);
 	printTree(19,22,7,0);
-	//printTree(8,-17,8,2);
 	printTree(50,40,7,0);
 	printTree(-50,15,10,1);
 	printTree(-50,10,8,2);
@@ -91,55 +93,56 @@ void drawScene(){
 	printTree(55,30,7,0);
 	printTree(54,-30,8,2);
 
-	//near the swimming pool
+	//bush near the swimming pool
 	printTree(-10,17,3,3);
 	printTree(10,17,3,3);
 	printTree(-10,33,3,3);
 	printTree(10,33,3,3);
 
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
-	printHouse(0,0,15,25,8);
+	
 
+	printHouse(0,0,15,25,8);
 	//new grass near the house
 	glPushMatrix();
 		glTranslatef(0,0.001,0);
 		printGround(0,5,70,60,texGrass2);
 	glPopMatrix();
-
 	//swimming pool
 	glPushMatrix();
 		glTranslatef(0,0.003,0);
 		printGround(0,25,12,20,texSwim);
 	glPopMatrix();
-
-	//ground near the swimmingpool
+	//ground under the swimmingpool
 	glPushMatrix();
 		glTranslatef(0,0.002,0);
 		printGround(0,25,14,22,texStoneGround);
 	glPopMatrix();
 
 
-
+	//bush near the path
 	printTree(-5,-10,3,3);
 	printTree(5,-10,3,3);
 	printTree(-5,-20,3,3);
 	printTree(5,-20,3,3);
-
 	//the path from gate to the door
 	glPushMatrix();
 		glTranslatef(0,0.002,0);
 		printGround(0,-19,24,7,texPath);
 	glPopMatrix();
 
-	
+	//fence	
 	printFence(-30,-30,-30,40);
 	printFence(-30,40,30,40);
 	printFence(30,40,30,-30);
 	
+	//front fence and gate
 	printFence(30,-30,5,-30);
 	printFence(-5,-30,-30,-30);
 	printGate(-5,-30,5,-30);
 
+
+	//hedge
 	glPushMatrix();
 		glTranslatef(0,0,38);
 		printHedge(59,2,5);
@@ -159,7 +162,7 @@ void drawScene(){
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
 
 
-	underTheDome();
+	underTheDome();// print the sky
 	printGrass();
 
 	
@@ -236,6 +239,15 @@ void printTree(int x, int y, int h, int type){
 		glDisable(GL_TEXTURE_2D);
 }
 
+/**
+ * @brief Print an House.
+ * This function print a very very very beautifull house whit a patio and parquet inner pavment.
+ * @param center_x x coordinate of the center of the house (x of the projection).
+ * @param center_y y coordinate of the center of the house (z of the projection).
+ * @param base_min length of the base z axis (max and min non have much sense).
+ * @param base_max length of the base x axis (max and min non have much sense).
+ * @param height height of the house.
+ */
 printHouse(int center_x, int center_y, int base_min, int base_max, int height){
 		glEnable(GL_TEXTURE_2D);
 		//glMaterialfv(GL_FRONT, GL_SPECULAR, light_0_col);
@@ -340,6 +352,7 @@ printHouse(int center_x, int center_y, int base_min, int base_max, int height){
 				glVertex3f(-base_max/2, height, base_min/2);
 			glEnd();
 
+			//Door
 			glBindTexture(GL_TEXTURE_2D, texDoor);
 			glBegin(GL_QUADS);
 				glNormal3f(0,0,-1);
@@ -353,35 +366,46 @@ printHouse(int center_x, int center_y, int base_min, int base_max, int height){
 				glVertex3f(2, 0.0, -base_min/2-0.01);
 			glEnd();
 
-		glPushMatrix();
-			glTranslatef(0,0.002,0);
-			printGround(center_x, center_y, base_min, base_max, texParquet);
-		glPopMatrix();
-
-		glPushMatrix();
-			int base_patio_min=base_min;
-			int base_patio_max=base_max/2;
-			glTranslatef(-base_max/2-base_patio_max/2,0.002,0);
-			printGround(center_x, center_y, base_patio_min, base_patio_max, texGround3);
-
-			glBindTexture(GL_TEXTURE_2D, texSchermatura);
-			glBegin(GL_QUADS);
-				glNormal3f(1,0,0);
-				glTexCoord2f(0, base_patio_min/6); 
-				glVertex3f(center_x-base_patio_max/2, 0.0, center_y-base_patio_min/2);
-				glTexCoord2f(1.0, base_patio_min/6); 
-				glVertex3f(center_x-base_patio_max/2, 5, center_y-base_patio_min/2);
-				glTexCoord2f(1.0, 0.0); 
-				glVertex3f(center_x+base_patio_max/2, 5, center_y-base_patio_min/2);
-				glTexCoord2f(0.0, 0.0); 
-				glVertex3f(center_x+base_patio_max/2, 0.0, center_y-base_patio_min/2);
-			glEnd();
-
-		glPopMatrix();
-
+			//parquet (inner)
+			glPushMatrix();
+				glTranslatef(0,0.002,0);
+				printGround(center_x, center_y, base_min, base_max, texParquet);
+			glPopMatrix();
+			
+			//patio
+			glPushMatrix();
+				//patio ground
+				int base_patio_min=base_min;
+				int base_patio_max=base_max/2;
+				glTranslatef(-base_max/2-base_patio_max/2,0.002,0);
+				printGround(center_x, center_y, base_patio_min, base_patio_max, texGround3);
+				//patio wood wall
+				glBindTexture(GL_TEXTURE_2D, texSchermatura);
+				glBegin(GL_QUADS);
+					glNormal3f(1,0,0);
+					glTexCoord2f(0, base_patio_min/6); 
+					glVertex3f(center_x-base_patio_max/2, 0.0, center_y-base_patio_min/2);
+					glTexCoord2f(1.0, base_patio_min/6); 
+					glVertex3f(center_x-base_patio_max/2, 5, center_y-base_patio_min/2);
+					glTexCoord2f(1.0, 0.0); 
+					glVertex3f(center_x+base_patio_max/2, 5, center_y-base_patio_min/2);
+					glTexCoord2f(0.0, 0.0); 
+					glVertex3f(center_x+base_patio_max/2, 0.0, center_y-base_patio_min/2);
+				glEnd();
+			glPopMatrix();
 		glPopMatrix();	
 }
 
+
+/**
+ * @brief Print a generic horizontal surface.
+ * This function print a rectangular surface.
+ * @param center_x x coordinate of the center of the surface (x of the projection).
+ * @param center_y y coordinate of the center of the surface (z of the projection).
+ * @param base_min length of the base z axis (max and min non have much sense).
+ * @param base_max length of the base x axis (max and min non have much sense).
+ * @param texture index of the texture binded to the surfcace.
+ */
 void printGround(int center_x, int center_y, int base_min, int base_max, GLuint texture){
 		glEnable(GL_TEXTURE_2D);
 		//glMaterialfv(GL_FRONT, GL_SPECULAR, light_0_col);
@@ -403,6 +427,15 @@ void printGround(int center_x, int center_y, int base_min, int base_max, GLuint 
 
 }
 
+
+/**
+ * @brief Print a fence.
+ * This function print a fence.
+ * @param start_x x coordinate of the start.
+ * @param starty_ y coordinate of the start (z of the projection).
+ * @param end_x x coordinate of the end.
+ * @param end_ y coordinate of the end (z of the projection).
+ */
 void printFence(int start_x, int start_y, int end_x, int end_y){
 	glEnable(GL_TEXTURE_2D);
 		//glMaterialfv(GL_FRONT, GL_SPECULAR, light_0_col);
@@ -423,6 +456,13 @@ void printFence(int start_x, int start_y, int end_x, int end_y){
 		glPopMatrix();	
 }
 
+/**
+ * @brief Print an Hedge.
+ * This function print an hedge centered in 0,0.
+ * @param lenght length of the hedge on x axis.
+ * @param width width of the hedge on z axis.
+ * @param height height of the hedge on y axis.
+ */
 void printHedge(int length, int width, int height){
 	glEnable(GL_TEXTURE_2D);
 		//glMaterialfv(GL_FRONT, GL_SPECULAR, light_0_col);
@@ -486,6 +526,14 @@ void printHedge(int length, int width, int height){
 		glPopMatrix();	
 }
 
+/**
+ * @brief Print a gate.
+ * This function print a gate, like a fence but change the texture and the binding.
+ * @param start_x x coordinate of the start.
+ * @param starty_ y coordinate of the start (z of the projection).
+ * @param end_x x coordinate of the end.
+ * @param end_ y coordinate of the end (z of the projection).
+ */
 void printGate(int start_x, int start_y, int end_x, int end_y){
 	glEnable(GL_TEXTURE_2D);
 		//glMaterialfv(GL_FRONT, GL_SPECULAR, light_0_col);
@@ -505,7 +553,10 @@ void printGate(int start_x, int start_y, int end_x, int end_y){
 		glPopMatrix();	
 }
 
-
+/**
+ * @brief Print a Dome that actually is a sphere.
+ * This function print a sphere whith the texture of a beautifull sky.
+ */
 void underTheDome(){
 	//i'm not a big fan of the series but after breaking bad i start to whatch it.
 	glPushAttrib(GL_LIGHTING_BIT);
@@ -526,6 +577,10 @@ void underTheDome(){
 
 }
 
+/**
+ * @brief Print a crowbar.
+ * This function print a crowbar taken from half life.
+ */
 HalfLifeCrowbar(){
 	if(HALF){
 		glDisable(GL_LIGHTING);
@@ -572,13 +627,14 @@ void createTexture(GLuint* text_name, char* file_path){
  * This function build all the texture.
  */
 void loadTexture(){
+
+	//nature
 	createTexture(&texGrass1,"./texture/grass.jpg");
 	createTexture(&texGrass2,"./texture/grass2.jpg");
 	createTexture(&texTree0,"./texture/tree0.png");
 	createTexture(&texTree1,"./texture/tree1.png");
 	createTexture(&texTree2,"./texture/tree2.png");
 	createTexture(&texTree3,"./texture/tree3.png");
-	createTexture(&texCrowBar,"./texture/crowbar2.png");
 
 	//house section
 	createTexture(&texBuild,"./texture/build.jpg");
@@ -588,7 +644,7 @@ void loadTexture(){
 	createTexture(&texGround3,"./texture/ground3.jpg");
 	createTexture(&texSchermatura,"./texture/schermatura.png");
 
-
+	//external house stuff
 	createTexture(&texSwim,"./texture/water.jpg");
 	createTexture(&texFence,"./texture/fence.png");
 	createTexture(&texHedge,"./texture/hedge.jpg");
@@ -597,15 +653,9 @@ void loadTexture(){
 	createTexture(&texPath,"./texture/path.jpg");
 
 	createTexture(&texSky,"./texture/sky2.jpg");
-}
 
-
-void drawString (void * font, char *s, float x, float y, float z){
-     unsigned int i;
-     glRasterPos3f(x, y, z);
-     glColor3f( 1, 1, 1 );
-     for (i = 0; i < strlen (s); i++)
-          glutBitmapCharacter (font, s[i]);
+	//Inutility
+	createTexture(&texCrowBar,"./texture/crowbar2.png");
 }
 
 int enableHalf(){
