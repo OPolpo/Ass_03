@@ -15,7 +15,8 @@ int HALF=0;
 
 SDL_Surface* sdlimage;
 
-static GLuint texName1;
+static GLuint texGrass1;
+static GLuint texGrass2;
 static GLuint texTree0;
 static GLuint texTree1;
 static GLuint texTree2;
@@ -24,6 +25,10 @@ static GLuint texCrowBar;
 static GLuint texBuild;
 static GLuint texRoof;
 static GLuint texSwim;
+static GLuint texFence;
+static GLuint texGate;
+static GLuint texStoneGround;
+static GLuint texPath;
 static GLuint texSky;
 
 
@@ -48,39 +53,31 @@ void drawScene(){
 	glLightfv(GL_LIGHT0, GL_EMISSION, light_0_col);
 	
 
-	glPushMatrix();
-	glTranslatef(light_pos[0],light_pos[1],light_pos[2]);
-	glutSolidSphere(0.1,10,10); 
+	// glPushMatrix();
+	// glTranslatef(light_pos[0],light_pos[1],light_pos[2]); //to see where the light is
+	// glutSolidSphere(0.1,10,10); 
+
 	
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(5,5,5);
-	glutSolidSphere(3,1000,1000); 
-	glPopMatrix();
+	//the 2 big tree in front of the house
+	printTree(20,-20,12,0);
+	printTree(-20,-20,12,0);
 
-	glPushMatrix();
-	glTranslatef(25,60,5);
-	glutSolidSphere(3,10,10); 
-	glPopMatrix();
-
-	//printGrass();
-	printTree(10,10,7,0);
-	printTree(-30,15,10,1);
-	printTree(-20,10,8,2);
-	printTree(-10,-19,3,3);
-	printTree(30,30,5,0);
-	printTree(-25,25,6,2);
+	printTree(-30,45,10,1);
+	printTree(-20,33,8,2);
+	printTree(-10,-49,3,3);
+	printTree(30,60,5,0);
+	printTree(-25,75,6,2);
 	printTree(35,30,7,0);
-	printTree(14,-30,8,2);
-	printTree(13,-10,7,0);
-	printTree(-14,14,10,1);
+	printTree(14,-60,8,2);
+	printTree(13,-40,7,0);
+	printTree(-14,54,10,1);
 	printTree(-20,19,8,2);
-	printTree(-15,-19,3,3);
+	//printTree(-15,-19,3,3);
 	printTree(24,30,5,0);
 	printTree(-21,27,6,2);
 	printTree(19,22,7,0);
-	printTree(8,-17,8,2);
-	printTree(50,10,7,0);
+	//printTree(8,-17,8,2);
+	printTree(50,40,7,0);
 	printTree(-50,15,10,1);
 	printTree(-50,10,8,2);
 	printTree(-50,-19,3,3);
@@ -90,15 +87,58 @@ void drawScene(){
 	printTree(54,-30,8,2);
 
 	//near the swimming pool
-	printTree(-10,30,3,3);
-	printTree(10,30,3,3);
-	printTree(-10,40,3,3);
-	printTree(10,40,3,3);
+	printTree(-10,12,3,3);
+	printTree(10,12,3,3);
+	printTree(-10,28,3,3);
+	printTree(10,28,3,3);
 
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
-	printHouse(0,0,8,15,5);
-	printSwimmingPool(0,35,8,15);
+	printHouse(0,0,15,25,5);
+
+	//new grass near the house
+	glPushMatrix();
+		glTranslatef(0,0.001,0);
+		printGround(0,0,60,60,texGrass2);
+	glPopMatrix();
+
+	//swimming pool
+	glPushMatrix();
+		glTranslatef(0,0.003,0);
+		printSwimmingPool(0,20,12,20);
+	glPopMatrix();
+
+	//ground near the swimmingpool
+	glPushMatrix();
+		glTranslatef(0,0.002,0);
+		printGround(0,20,14,22,texStoneGround);
+	glPopMatrix();
+
+
+
+	printTree(-5,-10,3,3);
+	printTree(5,-10,3,3);
+	printTree(-5,-20,3,3);
+	printTree(5,-20,3,3);
+
+	//the path from gate to the door
+	glPushMatrix();
+		glTranslatef(0,0.002,0);
+		printGround(0,-19,24,7,texPath);
+	glPopMatrix();
+
+	
+	printFence(-30,-30,-30,30);
+	printFence(-30,30,30,30);
+	printFence(30,30,30,-30);
+	
+	printFence(30,-30,5,-30);
+	printFence(-5,-30,-30,-30);
+	printGate(-5,-30,5,-30);
+
+
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
+
+
 	underTheDome();
 	printGrass();
 
@@ -118,7 +158,7 @@ void drawScene(){
 void printGrass(){
 		glEnable(GL_TEXTURE_2D);
 		glMaterialfv(GL_FRONT, GL_DIFFUSE, light_0_col);
-		glBindTexture(GL_TEXTURE_2D, texName1);
+		glBindTexture(GL_TEXTURE_2D, texGrass1);
 		glPushMatrix();
 			glBegin(GL_QUADS);
 				glNormal3f(0,1,0);
@@ -188,7 +228,7 @@ printHouse(int center_x, int center_y, int base_min, int base_max, int height){
 			//long sides
 			glBindTexture(GL_TEXTURE_2D, texBuild);
 			glBegin(GL_QUADS);
-				glNormal3f(-1,0,0);
+				glNormal3f(0,0,-1);
 				glTexCoord2f(0.0, 0.0); 
 				glVertex3f(-base_max/2, 0.0, base_min/2);
 				glTexCoord2f(0.0, 2.0); 
@@ -200,7 +240,7 @@ printHouse(int center_x, int center_y, int base_min, int base_max, int height){
 			glEnd();
 			glBindTexture(GL_TEXTURE_2D, texRoof);
 			glBegin(GL_TRIANGLES);
-				glNormal3f(-base_min/2,top-height,0);
+				glNormal3f(0,top-height,-base_min/2);
 				glTexCoord2f(0.0, 1.2); 
 				glVertex3f(-base_max/2, height, base_min/2);
 				glTexCoord2f(1.0, 0.0); 
@@ -212,19 +252,19 @@ printHouse(int center_x, int center_y, int base_min, int base_max, int height){
 			
 			glBindTexture(GL_TEXTURE_2D, texBuild);
 			glBegin(GL_QUADS);
-				glNormal3f(-1,0,0);
+				glNormal3f(0,0,-1);
 				glTexCoord2f(0.0, 0.0); 
 				glVertex3f(-base_max/2, 0.0, -base_min/2);
-				glTexCoord2f(0.0, 40.0); 
+				glTexCoord2f(0.0, 2.0); 
 				glVertex3f(-base_max/2, height, -base_min/2);
-				glTexCoord2f(20.0, 40.0); 
+				glTexCoord2f(10.0, 2.0); 
 				glVertex3f(base_max/2, height, -base_min/2);
-				glTexCoord2f(20.0, 0.0); 
+				glTexCoord2f(10.0, 0.0); 
 				glVertex3f(base_max/2, 0.0, -base_min/2);
 			glEnd();
 			glBindTexture(GL_TEXTURE_2D, texRoof);
 			glBegin(GL_TRIANGLES);
-				glNormal3f(-base_min/2,top-height,0);
+				glNormal3f(0,top-height,-base_min/2);
 				glTexCoord2f(0.0, 1.2); 
 				glVertex3f(-base_max/2, height, -base_min/2);
 				glTexCoord2f(1.0, 0.0); 
@@ -236,19 +276,19 @@ printHouse(int center_x, int center_y, int base_min, int base_max, int height){
 			//short sides
 			glBindTexture(GL_TEXTURE_2D, texBuild);
 			glBegin(GL_QUADS);
-				glNormal3f(0,0,1);
+				glNormal3f(1,0,0);
 				glTexCoord2f(0.0, 0.0); 
 				glVertex3f(base_max/2, 0.0, -base_min/2);
-				glTexCoord2f(0.0, 40.0); 
+				glTexCoord2f(0.0, 2.0); 
 				glVertex3f(base_max/2, height, -base_min/2);
-				glTexCoord2f(20.0, 40.0); 
+				glTexCoord2f(10.0, 2.0); 
 				glVertex3f(base_max/2, height, base_min/2);
-				glTexCoord2f(20.0, 0.0); 
+				glTexCoord2f(10.0, 0.0); 
 				glVertex3f(base_max/2, 0.0, base_min/2);
 			glEnd();
 			glBindTexture(GL_TEXTURE_2D, texRoof);
 			glBegin(GL_TRIANGLES);
-				glNormal3f(0,top-height,base_max/2);
+				glNormal3f(base_max/2,top-height,0);
 				glTexCoord2f(0.0, 2.0); 
 				glVertex3f(base_max/2, height, -base_min/2);
 				glTexCoord2f(1.0, 0.0); 
@@ -259,19 +299,19 @@ printHouse(int center_x, int center_y, int base_min, int base_max, int height){
 
 			glBindTexture(GL_TEXTURE_2D, texBuild);
 			glBegin(GL_QUADS);
-				glNormal3f(0,0,1);
+				glNormal3f(1,0,0);
 				glTexCoord2f(0.0, 0.0); 
 				glVertex3f(-base_max/2, 0.0, -base_min/2);
-				glTexCoord2f(0.0, 40.0); 
+				glTexCoord2f(0.0, 2.0); 
 				glVertex3f(-base_max/2, height, -base_min/2);
-				glTexCoord2f(20.0, 40.0); 
+				glTexCoord2f(10.0, 2.0); 
 				glVertex3f(-base_max/2, height, base_min/2);
-				glTexCoord2f(20.0, 0.0); 
+				glTexCoord2f(10.0, 0.0); 
 				glVertex3f(-base_max/2, 0.0, base_min/2);
 			glEnd();
 			glBindTexture(GL_TEXTURE_2D, texRoof);
 			glBegin(GL_TRIANGLES);
-				glNormal3f(0,top-height,base_max/2);
+				glNormal3f(base_max/2,top-height,0);
 				glTexCoord2f(0.0, 2.0); 
 				glVertex3f(-base_max/2, height, -base_min/2);
 				glTexCoord2f(1.0, 0.0); 
@@ -286,8 +326,7 @@ void printSwimmingPool(int center_x, int center_y, int base_min, int base_max){
 		glEnable(GL_TEXTURE_2D);
 		//glMaterialfv(GL_FRONT, GL_SPECULAR, light_0_col);
 		glPushMatrix();
-			glTranslatef(center_x,0.01,center_y);//i know it's very ugly bidimensional swimmingpool
-			//long sides
+			glTranslatef(center_x,0,center_y);//i know it's very ugly bidimensional swimmingpool
 			glBindTexture(GL_TEXTURE_2D, texSwim);
 			glBegin(GL_QUADS);
 				glNormal3f(0,1,0);
@@ -302,6 +341,65 @@ void printSwimmingPool(int center_x, int center_y, int base_min, int base_max){
 			glEnd();
 		glPopMatrix();	
 
+}
+void printGround(int center_x, int center_y, int base_min, int base_max, GLuint texture){
+		glEnable(GL_TEXTURE_2D);
+		//glMaterialfv(GL_FRONT, GL_SPECULAR, light_0_col);
+		glPushMatrix();
+			glTranslatef(center_x,0,center_y);//i know it's very ugly bidimensional swimmingpool
+			glBindTexture(GL_TEXTURE_2D, texture);
+			glBegin(GL_QUADS);
+				glNormal3f(0,1,0);
+				glTexCoord2f(0.0, 0.0); 
+				glVertex3f(-base_max/2, 0.0, -base_min/2);
+				glTexCoord2f(0.0, 1.0); 
+				glVertex3f(-base_max/2, 0, base_min/2);
+				glTexCoord2f(1.0, 1.0); 
+				glVertex3f(base_max/2, 0, base_min/2);
+				glTexCoord2f(1.0, 0.0); 
+				glVertex3f(base_max/2, 0.0, -base_min/2);
+			glEnd();
+		glPopMatrix();	
+
+}
+
+void printFence(int start_x, int start_y, int end_x, int end_y){
+	glEnable(GL_TEXTURE_2D);
+		//glMaterialfv(GL_FRONT, GL_SPECULAR, light_0_col);
+		int length=sqrt(pow(start_x-end_x,2)+pow(start_y-end_y,2));
+		glPushMatrix();
+			glBindTexture(GL_TEXTURE_2D, texFence);
+			glBegin(GL_QUADS);
+				glNormal3f(0,1,0);
+				glTexCoord2f(0.0, 1.0); 
+				glVertex3f(start_x, 0.0, start_y);
+				glTexCoord2f(0.0, 0.0); 
+				glVertex3f(start_x, 3, start_y);
+				glTexCoord2f(length/3, 0.0); 
+				glVertex3f(end_x, 3, end_y);
+				glTexCoord2f(length/3, 1.0); 
+				glVertex3f(end_x, 0.0, end_y);
+			glEnd();
+		glPopMatrix();	
+}
+
+void printGate(int start_x, int start_y, int end_x, int end_y){
+	glEnable(GL_TEXTURE_2D);
+		//glMaterialfv(GL_FRONT, GL_SPECULAR, light_0_col);
+		glPushMatrix();
+			glBindTexture(GL_TEXTURE_2D, texGate);
+			glBegin(GL_QUADS);
+				glNormal3f(0,1,0);
+				glTexCoord2f(0.0, 1.0); 
+				glVertex3f(start_x, 0.0, start_y);
+				glTexCoord2f(0.0, 0.0); 
+				glVertex3f(start_x, 5, start_y);
+				glTexCoord2f(1.0, 0.0); 
+				glVertex3f(end_x, 5, end_y);
+				glTexCoord2f(1.0, 1.0); 
+				glVertex3f(end_x, 0.0, end_y);
+			glEnd();
+		glPopMatrix();	
 }
 
 
@@ -371,7 +469,8 @@ void createTexture(GLuint* text_name, char* file_path){
  * This function build all the texture.
  */
 void loadTexture(){
-	createTexture(&texName1,"./texture/grass.jpg");
+	createTexture(&texGrass1,"./texture/grass.jpg");
+	createTexture(&texGrass2,"./texture/grass2.jpg");
 	createTexture(&texTree0,"./texture/tree0.png");
 	createTexture(&texTree1,"./texture/tree1.png");
 	createTexture(&texTree2,"./texture/tree2.png");
@@ -380,6 +479,11 @@ void loadTexture(){
 	createTexture(&texBuild,"./texture/build.jpg");
 	createTexture(&texRoof,"./texture/roof.jpg");
 	createTexture(&texSwim,"./texture/water.jpg");
+	createTexture(&texFence,"./texture/fence.png");
+	createTexture(&texGate,"./texture/gate.png");
+	createTexture(&texStoneGround,"./texture/stoneground.jpg");
+	createTexture(&texPath,"./texture/path.jpg");
+
 	createTexture(&texSky,"./texture/sky2.jpg");
 }
 
