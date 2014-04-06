@@ -21,6 +21,7 @@
 	void printSwimmingPool(int center_x, int center_y, int base_min, int base_max);
 	void printGround(int center_x, int center_y, int base_min, int base_max, GLuint texture);
 	void printFence(int start_x, int start_y, int end_x, int end_y);
+	void printHedge(int length, int width, int height);
 	void printGate(int start_x, int start_y, int end_x, int end_y);
 	void printTree(int x, int y, int h, int type);
 	void printGrass();

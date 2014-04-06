@@ -17,11 +17,11 @@
 
 
 // this to set initial view point
-double viewAngle_horizontal=0.30;//radiant
-double viewAngle_vertical=-0.39;//radiant
+double viewAngle_horizontal=0;//radiant
+double viewAngle_vertical=-0.39	;//radiant
 
-double eye[3]={0,1.2,0};// i suggest to use engle and distance to set pov and not this value
-double eye_ed[3]={0,0,30};
+double eye[3]={0,1.5,-40};
+double eye_ed[3]={0,0,0};
 
 const GLfloat material_col[] = {1.0, 1.0, 1.0};
 

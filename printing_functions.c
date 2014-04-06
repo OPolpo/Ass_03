@@ -4,12 +4,10 @@
  * @date 31 Mar 2014
  * @brief draw planets and other stuff
  *
- * In this file there are the function the print planet orbit and axis and the menu
+ * In this file there are the function the print all the object present in the map
  */
 
 #include "printing_functions.h"
-
-#define PI 3.141592653589793238462643383
 
 int HALF=0;
 
@@ -23,9 +21,11 @@ static GLuint texTree2;
 static GLuint texTree3;
 static GLuint texCrowBar;
 static GLuint texBuild;
+static GLuint texDoor;
 static GLuint texRoof;
 static GLuint texSwim;
 static GLuint texFence;
+static GLuint texHedge;
 static GLuint texGate;
 static GLuint texStoneGround;
 static GLuint texPath;
@@ -87,30 +87,30 @@ void drawScene(){
 	printTree(54,-30,8,2);
 
 	//near the swimming pool
-	printTree(-10,12,3,3);
-	printTree(10,12,3,3);
-	printTree(-10,28,3,3);
-	printTree(10,28,3,3);
+	printTree(-10,17,3,3);
+	printTree(10,17,3,3);
+	printTree(-10,33,3,3);
+	printTree(10,33,3,3);
 
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
-	printHouse(0,0,15,25,5);
+	printHouse(0,0,15,25,8);
 
 	//new grass near the house
 	glPushMatrix();
 		glTranslatef(0,0.001,0);
-		printGround(0,0,60,60,texGrass2);
+		printGround(0,5,70,60,texGrass2);
 	glPopMatrix();
 
 	//swimming pool
 	glPushMatrix();
 		glTranslatef(0,0.003,0);
-		printSwimmingPool(0,20,12,20);
+		printSwimmingPool(0,25,12,20);
 	glPopMatrix();
 
 	//ground near the swimmingpool
 	glPushMatrix();
 		glTranslatef(0,0.002,0);
-		printGround(0,20,14,22,texStoneGround);
+		printGround(0,25,14,22,texStoneGround);
 	glPopMatrix();
 
 
@@ -127,13 +127,18 @@ void drawScene(){
 	glPopMatrix();
 
 	
-	printFence(-30,-30,-30,30);
-	printFence(-30,30,30,30);
-	printFence(30,30,30,-30);
+	printFence(-30,-30,-30,40);
+	printFence(-30,40,30,40);
+	printFence(30,40,30,-30);
 	
 	printFence(30,-30,5,-30);
 	printFence(-5,-30,-30,-30);
 	printGate(-5,-30,5,-30);
+
+	glPushMatrix();
+	glTranslatef(0,0,38);
+	printHedge(59,2,5);
+	glPopMatrix();
 
 
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
@@ -221,7 +226,7 @@ printHouse(int center_x, int center_y, int base_min, int base_max, int height){
 		//glMaterialfv(GL_FRONT, GL_SPECULAR, light_0_col);
 		
 		int i=0;
-		int top=height+2;
+		int top=height+3;
 		glPushMatrix();
 			glTranslatef(center_x,0,center_y);
 
@@ -319,6 +324,22 @@ printHouse(int center_x, int center_y, int base_min, int base_max, int height){
 				glTexCoord2f(2.0, 2.0); 
 				glVertex3f(-base_max/2, height, base_min/2);
 			glEnd();
+
+			glBindTexture(GL_TEXTURE_2D, texDoor);
+			glBegin(GL_QUADS);
+				glNormal3f(0,0,-1);
+				glTexCoord2f(0.0, 0.0); 
+				glVertex3f(-2, 0.0, -base_min/2-0.01);
+				glTexCoord2f(0.0, 1.0); 
+				glVertex3f(-2, 5, -base_min/2-0.01);
+				glTexCoord2f(1.0, 1.0); 
+				glVertex3f(2, 5, -base_min/2-0.01);
+				glTexCoord2f(1.0, 0.0); 
+				glVertex3f(2, 0.0, -base_min/2-0.01);
+			glEnd();
+
+
+
 		glPopMatrix();	
 }
 
@@ -370,7 +391,7 @@ void printFence(int start_x, int start_y, int end_x, int end_y){
 		glPushMatrix();
 			glBindTexture(GL_TEXTURE_2D, texFence);
 			glBegin(GL_QUADS);
-				glNormal3f(0,1,0);
+				//glNormal3f(0,1,0);
 				glTexCoord2f(0.0, 1.0); 
 				glVertex3f(start_x, 0.0, start_y);
 				glTexCoord2f(0.0, 0.0); 
@@ -379,6 +400,69 @@ void printFence(int start_x, int start_y, int end_x, int end_y){
 				glVertex3f(end_x, 3, end_y);
 				glTexCoord2f(length/3, 1.0); 
 				glVertex3f(end_x, 0.0, end_y);
+			glEnd();
+		glPopMatrix();	
+}
+
+void printHedge(int length, int width, int height){
+	glEnable(GL_TEXTURE_2D);
+		//glMaterialfv(GL_FRONT, GL_SPECULAR, light_0_col);
+		glPushMatrix();
+			glBindTexture(GL_TEXTURE_2D, texHedge);
+			glBegin(GL_QUADS);//back
+				glNormal3f(-1,0,0);
+				glTexCoord2f(0.0, length/10); 
+				glVertex3f(-length/2, 0.0, width/2);
+				glTexCoord2f(height/5, length/10); 
+				glVertex3f(-length/2, height, width/2);
+				glTexCoord2f(height/5, 0.0); 
+				glVertex3f(length/2, height, width/2);
+				glTexCoord2f(0.0, 0.0); 
+				glVertex3f(length/2, 0.0, width/2);
+			glEnd();
+			glBegin(GL_QUADS);//front
+				glNormal3f(-1,0,0);
+				glTexCoord2f(0.0, length/10); 
+				glVertex3f(-length/2, 0.0, -width/2);
+				glTexCoord2f(height/5, length/10); 
+				glVertex3f(-length/2, height, -width/2);
+				glTexCoord2f(height/5, 0.0); 
+				glVertex3f(length/2, height, -width/2);
+				glTexCoord2f(0.0, 0.0); 
+				glVertex3f(length/2, 0.0, -width/2);
+			glEnd();
+			glBegin(GL_QUADS);//top
+				glNormal3f(0,-1,0);
+				glTexCoord2f(0.0, length/10); 
+				glVertex3f(-length/2, height, width/2);
+				glTexCoord2f(width/2, length/10); 
+				glVertex3f(-length/2, height, -width/2);
+				glTexCoord2f(width/2, 0.0);
+				glVertex3f(length/2, height, -width/2);
+				glTexCoord2f(0.0, 0.0); 
+				glVertex3f(length/2, height, width/2);
+			glEnd();
+			glBegin(GL_QUADS);//side
+				glNormal3f(1,0,0);
+				glTexCoord2f(0.0, width/2); 
+				glVertex3f(-length/2, 0.0, -width/2);
+				glTexCoord2f(height/5, width/2); 
+				glVertex3f(-length/2, height, -width/2);
+				glTexCoord2f(height/5, 0.0); 
+				glVertex3f(-length/2, height, +width/2);
+				glTexCoord2f(0.0, 0.0); 
+				glVertex3f(-length/2, 0.0, +width/2);
+			glEnd();
+			glBegin(GL_QUADS);//side
+				glNormal3f(1,0,0);
+				glTexCoord2f(0.0, width/2); 
+				glVertex3f(length/2, 0.0, -width/2);
+				glTexCoord2f(height/5, width/2); 
+				glVertex3f(length/2, height, -width/2);
+				glTexCoord2f(height/5, 0.0); 
+				glVertex3f(length/2, height, +width/2);
+				glTexCoord2f(0.0, 0.0); 
+				glVertex3f(length/2, 0.0, +width/2);
 			glEnd();
 		glPopMatrix();	
 }
@@ -477,9 +561,11 @@ void loadTexture(){
 	createTexture(&texTree3,"./texture/tree3.png");
 	createTexture(&texCrowBar,"./texture/crowbar2.png");
 	createTexture(&texBuild,"./texture/build.jpg");
+	createTexture(&texDoor,"./texture/door.png");
 	createTexture(&texRoof,"./texture/roof.jpg");
 	createTexture(&texSwim,"./texture/water.jpg");
 	createTexture(&texFence,"./texture/fence.png");
+	createTexture(&texHedge,"./texture/hedge.jpg");
 	createTexture(&texGate,"./texture/gate.png");
 	createTexture(&texStoneGround,"./texture/stoneground.jpg");
 	createTexture(&texPath,"./texture/path.jpg");
