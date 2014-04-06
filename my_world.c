@@ -1,3 +1,14 @@
+/**
+ * @file my_world.c
+ * @author Andrea Bocchese
+ * @date 31 Mar 2014
+ * @brief main file, contain init function and the main.
+ *
+ * The progrma print a little world whith an house, a patio, a swimming pool (outside the house), some three and other stuff.
+ * you can move around the house whith WASD and Mouse or if you want (no one will blame you for this) whit the arrow key.
+ *
+ */
+
 #include <math.h>		// For math routines (such as sqrt & trig).
 #include <stdio.h>
 #include <stdlib.h>		// For the "exit" function
@@ -20,7 +31,7 @@
 double viewAngle_horizontal=0;//radiant
 double viewAngle_vertical=-0.39	;//radiant
 
-double eye[3]={0,1.5,-40};
+double eye[3]={0,2.,-40};
 double eye_ed[3]={0,0,0};
 
 const GLfloat material_col[] = {1.0, 1.0, 1.0};
@@ -62,7 +73,6 @@ void initRendering(){
 	glEnable(GL_COLOR_MATERIAL);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, material_col);
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, light_ambient);
-
 	
 	locateCamera();
 	loadTexture();
@@ -93,13 +103,12 @@ int main( int argc, char** argv ){
  	initRendering();
 	
 	glutKeyboardFunc(myKeyboardFunc);
-	//glutMouseFunc(mouseClick);
 	glutSpecialFunc(mySpecialKeyFunc);
-	//glutSpecialUpFunc(keySpecialUp);
+	//glutSpecialUpFunc(keySpecialUp); //no time for do this (sorry is pretty unusable without this)
 	glutPassiveMotionFunc(mouseMovement);
 
-   	glutReshapeFunc( resizeWindow );
-   	glutDisplayFunc( drawScene );
+   	glutReshapeFunc(resizeWindow);
+   	glutDisplayFunc(drawScene);
 	glutMainLoop();
 
     return(0);

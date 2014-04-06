@@ -2,7 +2,7 @@
  * @file planets.c
  * @author Andrea Bocchese
  * @date 31 Mar 2014
- * @brief draw planets and other stuff
+ * @brief draw house and other stuff
  *
  * In this file there are the function the print all the object present in the map
  */
@@ -63,7 +63,7 @@ void drawScene(){
 	// glPushMatrix();
 	// glTranslatef(light_pos[0],light_pos[1],light_pos[2]); //to see where the light is
 	// glutSolidSphere(0.1,10,10); 
-
+	// glPopMatrix();
 	
 	//the 2 big tree in front of the house
 	printTree(20,-20,12,0);
@@ -92,6 +92,18 @@ void drawScene(){
 	printTree(-55,25,6,2);
 	printTree(55,30,7,0);
 	printTree(54,-30,8,2);
+	printTree(-70,69,8,2);
+	printTree(94,80,5,0);
+	printTree(-71,87,6,2);
+	printTree(69,72,7,0);
+	printTree(-59,-80,7,0);
+	printTree(-60,-65,10,1);
+	printTree(60,-70,8,2);
+	printTree(50,-89,3,3);
+	printTree(57,-60,5,0);
+	printTree(-65,25,6,2);
+	printTree(-55,80,7,0);
+	printTree(-54,-70,8,2);
 
 	//bush near the swimming pool
 	printTree(-10,17,3,3);
@@ -164,7 +176,6 @@ void drawScene(){
 
 	underTheDome();// print the sky
 	printGrass();
-
 	
 
     glFlush();
@@ -580,6 +591,8 @@ void underTheDome(){
 /**
  * @brief Print a crowbar.
  * This function print a crowbar taken from half life.
+ * In this assingment i don't put any information about the control key.
+ * If you want enable this you must press '1'.
  */
 HalfLifeCrowbar(){
 	if(HALF){

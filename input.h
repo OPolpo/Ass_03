@@ -31,13 +31,4 @@
 	
 	void locateCamera();
 
-	// void lookUp();
-
-	// void lookDown();
-	
-	// void turnLeft();
-	
-	// void turnRight();
-
-	void keySpecialUp(unsigned char key, int x, int y);
 #endif

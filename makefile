@@ -14,7 +14,7 @@ printing_functions.o: printing_functions.c
 my_world.o: my_world.c
 	$(CC) -c $^ $(SDL_INC) $(SDL_LIB)
 
-my_world: my_world.o printing_functions.o input.o simple_geometry.o
+my_world: my_world.o printing_functions.o input.o
 	$(CC) -o my_world $^ $(CFLAGS) $(SDL_INC) $(SDL_LIB)
 
 clear:
