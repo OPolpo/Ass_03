@@ -393,7 +393,7 @@ printHouse(int center_x, int center_y, int base_min, int base_max, int height){
 				//patio wood wall
 				glBindTexture(GL_TEXTURE_2D, texSchermatura);
 				glBegin(GL_QUADS);
-					glNormal3f(1,0,0);
+					glNormal3f(0,0,-1);
 					glTexCoord2f(0, base_patio_min/6); 
 					glVertex3f(center_x-base_patio_max/2, 0.0, center_y-base_patio_min/2);
 					glTexCoord2f(1.0, base_patio_min/6); 
