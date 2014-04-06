@@ -20,9 +20,14 @@ static GLuint texTree1;
 static GLuint texTree2;
 static GLuint texTree3;
 static GLuint texCrowBar;
+
 static GLuint texBuild;
+static GLuint texParquet;
 static GLuint texDoor;
 static GLuint texRoof;
+static GLuint texGround3;
+static GLuint texSchermatura;
+
 static GLuint texSwim;
 static GLuint texFence;
 static GLuint texHedge;
@@ -104,7 +109,7 @@ void drawScene(){
 	//swimming pool
 	glPushMatrix();
 		glTranslatef(0,0.003,0);
-		printSwimmingPool(0,25,12,20);
+		printGround(0,25,12,20,texSwim);
 	glPopMatrix();
 
 	//ground near the swimmingpool
@@ -136,8 +141,18 @@ void drawScene(){
 	printGate(-5,-30,5,-30);
 
 	glPushMatrix();
-	glTranslatef(0,0,38);
-	printHedge(59,2,5);
+		glTranslatef(0,0,38);
+		printHedge(59,2,5);
+	glPopMatrix();
+	glPushMatrix();
+		glTranslatef(28,0,5);
+		glRotatef(90,0,1,0);
+		printHedge(69,2,5);
+	glPopMatrix();
+	glPushMatrix();
+		glTranslatef(-28,0,5);
+		glRotatef(90,0,1,0);
+		printHedge(69,2,5);
 	glPopMatrix();
 
 
@@ -338,31 +353,35 @@ printHouse(int center_x, int center_y, int base_min, int base_max, int height){
 				glVertex3f(2, 0.0, -base_min/2-0.01);
 			glEnd();
 
-
-
-		glPopMatrix();	
-}
-
-void printSwimmingPool(int center_x, int center_y, int base_min, int base_max){
-		glEnable(GL_TEXTURE_2D);
-		//glMaterialfv(GL_FRONT, GL_SPECULAR, light_0_col);
 		glPushMatrix();
-			glTranslatef(center_x,0,center_y);//i know it's very ugly bidimensional swimmingpool
-			glBindTexture(GL_TEXTURE_2D, texSwim);
-			glBegin(GL_QUADS);
-				glNormal3f(0,1,0);
-				glTexCoord2f(0.0, 0.0); 
-				glVertex3f(-base_max/2, 0.0, -base_min/2);
-				glTexCoord2f(0.0, 1.0); 
-				glVertex3f(-base_max/2, 0, base_min/2);
-				glTexCoord2f(1.0, 1.0); 
-				glVertex3f(base_max/2, 0, base_min/2);
-				glTexCoord2f(1.0, 0.0); 
-				glVertex3f(base_max/2, 0.0, -base_min/2);
-			glEnd();
-		glPopMatrix();	
+			glTranslatef(0,0.002,0);
+			printGround(center_x, center_y, base_min, base_max, texParquet);
+		glPopMatrix();
 
+		glPushMatrix();
+			int base_patio_min=base_min;
+			int base_patio_max=base_max/2;
+			glTranslatef(-base_max/2-base_patio_max/2,0.002,0);
+			printGround(center_x, center_y, base_patio_min, base_patio_max, texGround3);
+
+			glBindTexture(GL_TEXTURE_2D, texSchermatura);
+			glBegin(GL_QUADS);
+				glNormal3f(1,0,0);
+				glTexCoord2f(0, base_patio_min/6); 
+				glVertex3f(center_x-base_patio_max/2, 0.0, center_y-base_patio_min/2);
+				glTexCoord2f(1.0, base_patio_min/6); 
+				glVertex3f(center_x-base_patio_max/2, 5, center_y-base_patio_min/2);
+				glTexCoord2f(1.0, 0.0); 
+				glVertex3f(center_x+base_patio_max/2, 5, center_y-base_patio_min/2);
+				glTexCoord2f(0.0, 0.0); 
+				glVertex3f(center_x+base_patio_max/2, 0.0, center_y-base_patio_min/2);
+			glEnd();
+
+		glPopMatrix();
+
+		glPopMatrix();	
 }
+
 void printGround(int center_x, int center_y, int base_min, int base_max, GLuint texture){
 		glEnable(GL_TEXTURE_2D);
 		//glMaterialfv(GL_FRONT, GL_SPECULAR, light_0_col);
@@ -410,7 +429,7 @@ void printHedge(int length, int width, int height){
 		glPushMatrix();
 			glBindTexture(GL_TEXTURE_2D, texHedge);
 			glBegin(GL_QUADS);//back
-				glNormal3f(-1,0,0);
+				glNormal3f(0,0,-1);
 				glTexCoord2f(0.0, length/10); 
 				glVertex3f(-length/2, 0.0, width/2);
 				glTexCoord2f(height/5, length/10); 
@@ -421,7 +440,7 @@ void printHedge(int length, int width, int height){
 				glVertex3f(length/2, 0.0, width/2);
 			glEnd();
 			glBegin(GL_QUADS);//front
-				glNormal3f(-1,0,0);
+				glNormal3f(0,0,-1);
 				glTexCoord2f(0.0, length/10); 
 				glVertex3f(-length/2, 0.0, -width/2);
 				glTexCoord2f(height/5, length/10); 
@@ -560,9 +579,16 @@ void loadTexture(){
 	createTexture(&texTree2,"./texture/tree2.png");
 	createTexture(&texTree3,"./texture/tree3.png");
 	createTexture(&texCrowBar,"./texture/crowbar2.png");
+
+	//house section
 	createTexture(&texBuild,"./texture/build.jpg");
+	createTexture(&texParquet,"./texture/parquet.jpg");
 	createTexture(&texDoor,"./texture/door.png");
 	createTexture(&texRoof,"./texture/roof.jpg");
+	createTexture(&texGround3,"./texture/ground3.jpg");
+	createTexture(&texSchermatura,"./texture/schermatura.png");
+
+
 	createTexture(&texSwim,"./texture/water.jpg");
 	createTexture(&texFence,"./texture/fence.png");
 	createTexture(&texHedge,"./texture/hedge.jpg");
