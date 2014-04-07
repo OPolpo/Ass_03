@@ -367,13 +367,13 @@ printHouse(int center_x, int center_y, int base_min, int base_max, int height){
 			glBindTexture(GL_TEXTURE_2D, texDoor);
 			glBegin(GL_QUADS);
 				glNormal3f(0,0,-1);
-				glTexCoord2f(0.0, 0.0); 
-				glVertex3f(-2, 0.0, -base_min/2-0.01);
-				glTexCoord2f(0.0, 1.0); 
-				glVertex3f(-2, 5, -base_min/2-0.01);
 				glTexCoord2f(1.0, 1.0); 
-				glVertex3f(2, 5, -base_min/2-0.01);
+				glVertex3f(-2, 0.0, -base_min/2-0.01);
 				glTexCoord2f(1.0, 0.0); 
+				glVertex3f(-2, 5, -base_min/2-0.01);
+				glTexCoord2f(0.0, 0.0); 
+				glVertex3f(2, 5, -base_min/2-0.01);
+				glTexCoord2f(0.0, 1.0); 
 				glVertex3f(2, 0.0, -base_min/2-0.01);
 			glEnd();
 
